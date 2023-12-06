@@ -7,6 +7,7 @@ describe('Team model', function () {
 
     describe('model properties', async function () {
         let pt1, pt2, pt3
+        let d1, d2
         let ATeam
         let smallerTeamType
         let biggerTeamType
@@ -31,9 +32,9 @@ describe('Team model', function () {
             await teamType.save()
             ATeam = await app.db.models.Team.findOne({ where: { name: 'ATeam' } })
 
-            const d1 = await app.db.models.Device.create({ name: 'd1', type: 't1', credentialSecret: '' })
+            d1 = await app.db.models.Device.create({ name: 'd1', type: 't1', credentialSecret: '' })
             await ATeam.addDevice(d1)
-            const d2 = await app.db.models.Device.create({ name: 'd2', type: 't1', credentialSecret: '' })
+            d2 = await app.db.models.Device.create({ name: 'd2', type: 't1', credentialSecret: '' })
             await ATeam.addDevice(d2)
 
             // Create a new teamType with stricter limits
@@ -178,6 +179,16 @@ describe('Team model', function () {
         it('checkTeamTypeUpdateAllowed allows changing type to bigger type', async function () {
             await ATeam.checkTeamTypeUpdateAllowed(biggerTeamType)
         })
+        it('checkDeviceCreateAllowed', async function () {
+            await ATeam.checkDeviceCreateAllowed().should.be.rejected() // Already at the limit
+
+            // Remove a device
+            await d1.destroy()
+
+            // Check we can now create a device
+            await ATeam.checkDeviceCreateAllowed().should.be.resolved()
+        })
+
         it('updateTeamType applies type change', async function () {
             await ATeam.updateTeamType(biggerTeamType)
             const reloadedTeam = await app.db.models.Team.findOne({ where: { name: 'ATeam' } })

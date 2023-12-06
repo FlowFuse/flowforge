@@ -190,4 +190,43 @@ describe('Team controller', function () {
             throw new Error('Allowed last owner to be removed')
         })
     })
+
+    describe('suspendTeam', function () {
+        let team
+        let stack
+        before(async function () {
+            team = await app.db.models.Team.byName('ATeam')
+            const stackProperties = {
+                name: 'defaultStack',
+                active: true,
+                properties: { foo: 'bar' }
+            }
+            stack = await app.db.models.ProjectStack.create(stackProperties)
+        })
+        async function setupProject (name = 'test-project-one') {
+            const project = await app.db.models.Project.create({
+                name,
+                type: '',
+                url: ''
+            })
+            await project.setProjectStack(stack)
+            await team.addProject(project)
+            return app.db.models.Project.byId(project.id)
+        }
+
+        it('suspends all running instances', async function () {
+            const p1 = await setupProject('p1')
+            await (await app.containers.start(p1)).started
+            const p2 = await setupProject('p2')
+            await (await app.containers.start(p2)).started
+
+            ;(await app.containers.details(p1)).should.have.property('state', 'running')
+            ;(await app.containers.details(p2)).should.have.property('state', 'running')
+
+            await app.db.controllers.Team.suspendTeam(team)
+
+            ;(await app.containers.details(p1)).should.have.property('state', 'suspended')
+            ;(await app.containers.details(p2)).should.have.property('state', 'suspended')
+        })
+    })
 })

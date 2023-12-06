@@ -29,7 +29,7 @@ module.exports.init = function (app) {
                     } else {
                         app.log.info(`Team ${subscription.Team.hashid} ending trial - suspending instances`)
                         // Stripe not configured - suspend the lot
-                        await suspendAllProjects(subscription.Team)
+                        await app.db.controllers.Team.suspendTeam(subscription.Team)
                         await sendTrialEmail(subscription.Team, 'TrialTeamSuspended', {
                             teamSettingsURL: `${app.config.base_url}/team/${subscription.Team.slug}/billing`
                         })
@@ -112,29 +112,5 @@ module.exports.init = function (app) {
             }
         }
     }
-
-    async function suspendAllProjects (team) {
-        const projects = await team.getProjects()
-        for (const project of projects) {
-            if (project.state !== 'suspended') {
-                if (!project.Team) {
-                    project.Team = team
-                }
-                // There is some DRY code here with projectActions.js suspend logic.
-                // TODO: consider move to controllers.Project
-                try {
-                    app.db.controllers.Project.setInflightState(project, 'suspending')
-                    await app.containers.stop(project)
-                    app.db.controllers.Project.clearInflightState(project)
-                    await app.auditLog.Project.project.suspended(null, null, project)
-                } catch (err) {
-                    app.db.controllers.Project.clearInflightState(project)
-                    const resp = { code: 'unexpected_error', error: err.toString() }
-                    await app.auditLog.Project.project.suspended(null, resp, project)
-                }
-            }
-        }
-    }
-
     return trialTask
 }

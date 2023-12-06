@@ -111,6 +111,7 @@ module.exports = function (app) {
         // for trial mode.
         const subscription = await this.getSubscription()
         if (subscription) {
+            await app.billing.resyncTeamSubscription(this, subscription)
             if (subscription.isActive() || subscription.isUnmanaged()) {
                 // Billing setup - allowed to create projects
                 return
@@ -153,6 +154,36 @@ module.exports = function (app) {
 
         const subscription = await this.getSubscription()
         if (subscription) {
+            await app.billing.resyncTeamSubscription(this, subscription)
+            if (subscription.isActive() || subscription.isUnmanaged()) {
+                return
+            }
+            if (subscription.isTrial() && !subscription.isTrialEnded()) {
+                // In trial without billing setup
+                return
+            }
+        }
+        // Cannot resume if trial mode has ended
+        const err = new Error()
+        err.statusCode = 402
+        err.code = 'billing_required'
+        err.error = 'Team billing not configured'
+        throw err
+    }
+
+    app.db.models.Team.prototype._checkDeviceCreateAllowed = app.db.models.Team.prototype.checkDeviceCreateAllowed
+    /**
+     * Checks whether this team can create a device. For EE/billing platforms,
+     * this checks the billing/subscription state
+     */
+    app.db.models.Team.prototype.checkDeviceCreateAllowed = async function () {
+        // First do base checks
+        await this._checkDeviceCreateAllowed()
+
+        const subscription = await this.getSubscription()
+        if (subscription) {
+            await app.billing.resyncTeamSubscription(this, subscription)
+
             if (subscription.isActive() || subscription.isUnmanaged()) {
                 return
             }

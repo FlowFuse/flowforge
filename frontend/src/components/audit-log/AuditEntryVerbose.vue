@@ -241,6 +241,12 @@
         <span v-if="!error && entry.body?.billingSession" />
         <span v-else-if="!error">Billing data not found in audit entry.</span>
     </template>
+    <template v-else-if="entry.event === 'billing.subscription.updated'">
+        <label>{{ AuditEvents[entry.event] }}</label>
+        <span v-if="!error && entry.body.updates[0]?.key === 'status'">Subscription status updated to '{{ entry.body.updates[0].new }}'</span>
+        <span v-else-if="!error && entry.body.updates">Subscription status updated: '{{ entry.body.updates[0] }}'</span>
+        <span v-else-if="!error">Billing data not found in audit entry.</span>
+    </template>
 
     <!-- Platform License Events -->
     <template v-else-if="entry.event === 'platform.license.applied' || entry.event === 'platform.licence.apply'">

@@ -388,6 +388,31 @@ module.exports = {
                 },
 
                 /**
+                 * Checks to see if a device can be created in this team.
+                 * At this level, the check looks at any restrictions applied
+                 * by the TeamType object.
+                 * When running with EE, this function is overloaded via
+                 * ee/lib/billing/Team.js to add EE-specific checks as well
+                 * (such as billing and trials)
+                 *
+                 * If the create is not allowed, an error is thrown with code/error
+                 * properties set
+                 */
+                checkDeviceCreateAllowed: async function () {
+                    await this.ensureTeamTypeExists()
+                    const teamDeviceLimit = await this.getDeviceLimit()
+                    if (teamDeviceLimit > -1) {
+                        const currentDeviceCount = await this.deviceCount()
+                        if (currentDeviceCount >= teamDeviceLimit) {
+                            const err = new Error()
+                            err.code = 'device_limit_reached'
+                            err.error = 'Team device limit reached'
+                            throw err
+                        }
+                    }
+                },
+
+                /**
                  * Checks whether the team type can be modified to the requested type.
                  * The team must be within any limits of the target type.
                  */

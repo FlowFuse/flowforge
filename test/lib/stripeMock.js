@@ -20,6 +20,9 @@ module.exports = (testSpecificMock = {}) => {
             createBalanceTransaction: sandbox.stub().resolves({ status: 'ok' })
         },
         subscriptions: {
+            _createTestSubscription: (subId, data) => {
+                stripeData[subId] = data
+            },
             create: (subId) => {
                 if (!stripeData[subId]) {
                     stripeData[subId] = { metadata: {}, items: { data: [] } }

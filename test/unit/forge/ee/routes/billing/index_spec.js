@@ -18,7 +18,7 @@ describe('Billing routes', function () {
 
     async function getLog () {
         const logs = await app.db.models.AuditLog.forEntity()
-        return (await app.db.views.AuditLog.auditLog({ log: logs.log })).log[0]
+        return (await app.db.views.AuditLog.auditLog({ log: logs.log })).log
     }
 
     async function login (username, password) {
@@ -67,6 +67,8 @@ describe('Billing routes', function () {
 
         beforeEach(async function () {
             sandbox.stub(app.billing)
+            // Do not stub this one function
+            app.billing.updateSubscriptionStatus.restore()
             sandbox.stub(app.log, 'info')
             sandbox.stub(app.log, 'warn')
             sandbox.stub(app.log, 'error')
@@ -476,7 +478,7 @@ describe('Billing routes', function () {
 
                 const subscription = await app.db.models.Subscription.byCustomerId('cus_1234567890')
                 should(subscription.status).equal(app.db.models.Subscription.STATUS.CANCELED)
-                const log = await getLog()
+                const log = (await getLog())[0]
                 log.event.should.equal('billing.subscription.updated')
                 log.body.updates.should.have.length(1)
                 log.body.updates[0].key.should.equal('status')
@@ -515,7 +517,7 @@ describe('Billing routes', function () {
 
                 const subscription = await app.db.models.Subscription.byCustomerId('cus_1234567890')
                 should(subscription.status).equal(app.db.models.Subscription.STATUS.PAST_DUE)
-                const log = await getLog()
+                const log = (await getLog())[0]
                 log.event.should.equal('billing.subscription.updated')
                 log.body.updates.should.have.length(1)
                 log.body.updates[0].key.should.equal('status')
@@ -709,11 +711,15 @@ describe('Billing routes', function () {
                 projectsStatesAfter.map((project) => project.state).should.match(['suspended', 'suspended', 'suspended'])
 
                 const log = await getLog()
-                log.event.should.equal('billing.subscription.updated')
-                log.body.updates.should.have.length(1)
-                log.body.updates[0].key.should.equal('status')
-                log.body.updates[0].old.should.equal('active')
-                log.body.updates[0].new.should.equal('canceled')
+                // Two projects suspended - check they got logged
+                log[0].event.should.equal('project.suspended')
+                log[1].event.should.equal('project.suspended')
+                // Third event is the billing.sub.updated event
+                log[2].event.should.equal('billing.subscription.updated')
+                log[2].body.updates.should.have.length(1)
+                log[2].body.updates[0].key.should.equal('status')
+                log[2].body.updates[0].old.should.equal('active')
+                log[2].body.updates[0].new.should.equal('canceled')
             })
 
             it('Handles cancellation for unknown customers', async () => {

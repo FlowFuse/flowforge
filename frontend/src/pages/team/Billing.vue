@@ -50,6 +50,21 @@
                 Something went wrong loading your subscription information, please try again.
             </div>
         </div>
+        <EmptyState v-else-if="subscriptionExpired">
+            <template #img>
+                <img src="../../images/empty-states/team-instances.png">
+            </template>
+            <template #header>Your Team Subscription Has Expired</template>
+            <template #message>
+                <p>
+                    Your subscription has expired. To continue using this team, you will need to
+                    setup billing again.
+                </p>
+            </template>
+            <template #actions>
+                <ff-button data-action="change-team-type" :to="{name: 'TeamChangeType'}">Setup Billing</ff-button>
+            </template>
+        </EmptyState>
         <EmptyState v-else-if="!isUnmanaged">
             <template #img>
                 <img src="../../images/empty-states/team-instances.png">

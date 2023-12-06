@@ -37,7 +37,8 @@
         "project.duplicated": "Instance Duplicated",
         "billing.session.created": "Billing Session Created",
         "billing.session.completed": "Billing Session Completed",
-        "billing.subscription.deleted": "Billing Subscription Deleted"
+        "billing.subscription.deleted": "Billing Subscription Deleted",
+        "billing.subscription.updated": "Billing Subscription Updated"
     },
     "application": {
         "application.created": "Application Created",

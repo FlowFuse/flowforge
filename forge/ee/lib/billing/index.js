@@ -531,6 +531,59 @@ module.exports.init = async function (app) {
             subscription.trialEndsAt = null
             subscription.trialStatus = app.db.models.Subscription.TRIAL_STATUS.ENDED
             await subscription.save()
+        },
+
+        /**
+         * Resynchronises a subscription with stripe. This ensures are local view
+         * of the subscription status matches stripe's view.
+         */
+        resyncTeamSubscription: async (team, subscription) => {
+            if (subscription.subscription) {
+                try {
+                    const stripeSubscription = await stripe.subscriptions.retrieve(subscription.subscription)
+                    if (stripeSubscription?.status !== subscription.status) {
+                        // We have got out of sync. We primarily care about being
+                        // in the canceled state.
+                        // Note: a canceled subscription cannot become uncanceled
+                        if (stripeSubscription.status === 'canceled') {
+                            await app.billing.updateSubscriptionStatus(subscription, stripeSubscription.status, team)
+                            await app.db.controllers.Team.suspendTeam(team)
+                        } else {
+                            app.log.warn(`Subscription status for team ${team.hashid} does not match stripe "${subscription.status}" vs "${stripeSubscription?.status}". Subscription ${subscription.subscription}.`)
+                        }
+                    }
+                } catch (err) {
+                    // For now, we'll log this error, but not rethrow it.
+                    app.log.warn(`Error syncing team ${team.hashid} subscription ${subscription.subscription}: ${err.message}`)
+                }
+            }
+        },
+
+        /**
+         * Update a subscription's local status. This is typically going to be done
+         * when we are detect a change from stripe.
+         *
+         * In addition to updating the field, it adds an audit log entry of the change.
+         *
+         * @param {*} subscription
+         * @param {*} newStatus
+         * @param {*} team
+         * @param {*} user
+         */
+        updateSubscriptionStatus: async function (subscription, newStatus, team, user) {
+            if (subscription.status === newStatus) {
+                return
+            }
+            const oldStatus = subscription.status
+
+            subscription.status = newStatus
+            await subscription.save()
+
+            if (team) {
+                const changes = new app.auditLog.formatters.UpdatesCollection()
+                changes.push('status', oldStatus, newStatus)
+                await app.auditLog.Team.billing.subscription.updated(user, null, team, subscription, changes)
+            }
         }
     }
 }
