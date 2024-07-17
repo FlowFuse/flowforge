@@ -3,12 +3,35 @@ const StripeMock = require('../../../lib/stripeMock.js')
 
 const multipleBlueprints = require('../cypress/fixtures/blueprints/multiple-blueprints.json')
 
+const smtp = require('./smtp')
+
 const FF_UTIL = require('flowforge-test-utils')
+const { LocalTransport } = require('flowforge-test-utils/forge/postoffice/localTransport.js')
 const Forge = FF_UTIL.require('forge/forge.js')
 const { Roles } = FF_UTIL.require('forge/lib/roles')
 
 module.exports = async function (settings = {}, config = {}) {
     process.env.FF_TELEMETRY_DISABLED = true
+
+    switch (true) {
+    case process.env.WITH_LOCAL_SMTP && process.env.WITH_LOCAL_SMTP === 'true':
+        // running locally with smtp enabled
+        await smtp({
+            smtpPort: config.email.smtp.port,
+            webPort: config.email.smtp.webPort
+        })
+        break
+    case process.env.GITHUB_ACTIONS === 'true':
+        // running in CI
+        config.email.smtp.host = process.env.SMTP_HOST
+        config.email.smtp.port = process.env.SMTP_PORT
+        break
+    default:
+        // running locally without smtp configured
+        delete config.email.smtp
+        config.email.transport = new LocalTransport()
+    }
+
     config = {
         ...config,
         telemetry: { enabled: false },

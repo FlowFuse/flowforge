@@ -1,19 +1,10 @@
 /* eslint-disable n/no-process-exit */
 'use strict'
 
-const smtp = require('./environments/smtp.js')
 const app = require('./environments/standard.js')
 
 ;(async function () {
     const PORT = 3001
-    const smtpConfig = {
-        smtpPort: process.env.SMTP_PORT || 1025,
-        webPort: process.env.SMTP_WEB_PORT || 8025
-    }
-
-    if (!process.env.NO_SMTP_SERVER || process.env.NO_SMTP_SERVER === 'false') {
-        await smtp({ smtpPort: smtpConfig.smtpPort, webPort: smtpConfig.webPort })
-    }
 
     const flowforge = await app({}, {
         host: 'localhost',
@@ -22,8 +13,9 @@ const app = require('./environments/standard.js')
             enabled: true,
             debug: true,
             smtp: {
-                host: process.env.SMTP_HOST || 'localhost',
-                port: smtpConfig.smtpPort,
+                host: 'localhost',
+                port: 1025,
+                webPort: 8025,
                 secure: false,
                 debug: true
             }
