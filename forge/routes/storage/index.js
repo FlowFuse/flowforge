@@ -25,14 +25,20 @@ module.exports = async function (app) {
 
     app.post('/:projectId/flows', async (request, response) => {
         const id = request.params.projectId
+        let UserId = null
+        if (request.headers['ff-user']) {
+            UserId = app.db.models.User.decodeHashid(request.headers['ff-user'])[0]
+        }
         // Check if the project exists first
         let flow = await app.db.models.StorageFlow.byProject(id)
         if (flow) {
             flow.flow = JSON.stringify(request.body)
+            flow.UserId = UserId
             await flow.save()
         } else {
             flow = await app.db.models.StorageFlow.create({
                 flow: JSON.stringify(request.body),
+                UserId,
                 ProjectId: id
             })
 

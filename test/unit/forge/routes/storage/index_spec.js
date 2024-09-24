@@ -147,6 +147,31 @@ describe('Storage API', function () {
             const flow = response.json()
             should(flow).eqls(newFlow)
         })
+
+        it('Save Flow with user', async function () {
+            const newFlow = [{ id: '1', type: 'tab', label: 'tab1', disabled: false, info: '' }]
+            const flowURL = `/storage/${project.id}/flows`
+            await app.inject({
+                method: 'POST',
+                url: flowURL,
+                headers: {
+                    authorization: `Bearer ${tokens.token}`,
+                    'ff-user': app.adminUser.hashid
+                },
+                payload: newFlow
+            })
+            const response = await app.inject({
+                method: 'GET',
+                url: flowURL,
+                headers: {
+                    authorization: `Bearer ${tokens.token}`
+                }
+            })
+            const flow = response.json()
+            should(flow).eqls(newFlow)
+            const dbFlow = await app.db.models.StorageFlow.byProject(project.id)
+            dbFlow.should.have.property('UserId', app.adminUser.id)
+        })
     })
 
     describe('/credentials', function () {

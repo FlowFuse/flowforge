@@ -15,6 +15,7 @@ module.exports = {
     },
     associations: function (M) {
         this.belongsTo(M.Project)
+        this.belongsTo(M.User)
     },
     finders: function (M) {
         return {
@@ -22,7 +23,7 @@ module.exports = {
                 byProject: async (project) => {
                     return this.findOne({
                         where: { ProjectId: project },
-                        attributes: ['id', 'flow', 'updatedAt']
+                        attributes: ['id', 'flow', 'updatedAt', 'UserId']
                     })
                 }
             }

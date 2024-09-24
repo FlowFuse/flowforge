@@ -321,7 +321,12 @@ const instanceAutoSnapshotUtils = {
             // 2. log the snapshot creation in audit log
             // 3. delete older auto snapshots if the limit is reached (10)
             //    do NOT delete any snapshots that are currently in use by an target (instance/device/device group)
-            const user = meta?.user || { id: null } // if no user is available, use `null` (system user)
+            const currentFlow = await app.db.models.StorageFlow.byProject(project.id)
+            let flowUser = null
+            if (currentFlow.UserId !== null) {
+                flowUser = currentFlow.UserId
+            }
+            const user = meta?.user || { id: flowUser } // if no user is available, use `null` (system user)
 
             // 1. create a snapshot from the instance
             const snapShot = await app.db.controllers.ProjectSnapshot.createSnapshot(
