@@ -34,6 +34,7 @@ You will need a Kubernetes environment. The deployment has currently been tested
  - [AWS EKS](aws_terraform.md)
  - [Digital Ocean](digital-ocean.md)
  - MicroK8s
+ - [Azure AKS](azure.md)
 
  It should run on any Kubernetes platform, but may require some changes for vendor specific Ingress setup.
 
