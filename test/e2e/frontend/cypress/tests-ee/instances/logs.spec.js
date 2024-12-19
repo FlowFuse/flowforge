@@ -1,9 +1,10 @@
 describe('FlowForge - Instance - Logs', () => {
     let instance
+    let team
     function navigateToInstanceLogs (teamName, instanceName) {
         cy.request('GET', '/api/v1/user/teams')
             .then((response) => {
-                const team = response.body.teams.find(
+                team = response.body.teams.find(
                     (team) => team.name === teamName
                 )
                 return cy.request('GET', `/api/v1/teams/${team.id}/projects`)
@@ -12,7 +13,7 @@ describe('FlowForge - Instance - Logs', () => {
                 instance = response.body.projects.find(
                     (app) => app.name === instanceName
                 )
-                cy.visit(`/instance/${instance.id}/logs`)
+                cy.visit(`/team/${team.slug}/instances/${instance.id}/logs`)
                 cy.wait('@getInstance')
             })
     }

@@ -113,7 +113,7 @@ describe('FlowFuse - Deploy Blueprint', () => {
                 cy.wait('@createInstance')
                 cy.wait('@getInstance')
 
-                cy.window().then((win) => expect(win.location.href).to.match(/.*\/instance\/[^/]+\/overview/))
+                cy.window().then((win) => expect(win.location.href).to.match(/.*\/instances\/[^/]+\/overview/))
             })
 
             it('can deploy pre-defined blueprints', () => {
@@ -148,7 +148,7 @@ describe('FlowFuse - Deploy Blueprint', () => {
                         cy.window()
                     })
                     .then((win) => {
-                        expect(win.location.href).to.match(/.*\/instance\/[^/]+\/overview/)
+                        expect(win.location.href).to.match(/.*\/instances\/[^/]+\/overview/)
                     })
             })
         })
@@ -215,7 +215,7 @@ describe('FlowFuse - Deploy Blueprint', () => {
                 cy.wait('@createInstance')
                 cy.wait('@getInstance')
 
-                cy.window().then((win) => expect(win.location.href).to.match(/.*\/instance\/[^/]+\/overview/))
+                cy.window().then((win) => expect(win.location.href).to.match(/.*\/instances\/[^/]+\/overview/))
             })
 
             it('can deploy pre-defined blueprints after logging in', () => {
@@ -253,7 +253,7 @@ describe('FlowFuse - Deploy Blueprint', () => {
                         cy.window()
                     })
                     .then((win) => {
-                        expect(win.location.href).to.match(/.*\/instance\/[^/]+\/overview/)
+                        expect(win.location.href).to.match(/.*\/instances\/[^/]+\/overview/)
                     })
             })
         })
@@ -315,7 +315,7 @@ describe('FlowFuse - Deploy Blueprint', () => {
                     cy.get('[data-el="page-name"]').contains(instanceName)
                     cy.contains('type1 / stack 1')
 
-                    cy.url().should('match', /^.*\/instance\/.*\/overview/)
+                    cy.url().should('match', /^.*\/instances\/.*\/overview/)
                 })
         })
 
@@ -374,7 +374,7 @@ describe('FlowFuse - Deploy Blueprint', () => {
                     cy.get('[data-el="page-name"]').contains(instanceName)
                     cy.contains('type1 / stack 1')
 
-                    cy.url().should('match', /^.*\/instance\/.*\/overview/)
+                    cy.url().should('match', /^.*\/instances\/.*\/overview/)
                 })
         })
 
@@ -444,11 +444,11 @@ describe('FlowFuse - Deploy Blueprint', () => {
                     cy.get('[data-el="page-name"]').contains(instanceName)
                     cy.contains('type1 / stack 1')
 
-                    cy.url().should('match', /^.*\/instance\/.*\/overview/)
+                    cy.url().should('match', /^.*\/instances\/.*\/overview/)
                 })
                 .then(() => cy.window())
                 .then((win) => {
-                    expect(win.location.href).to.match(/.*\/instance\/[^/]+\/overview/)
+                    expect(win.location.href).to.match(/.*\/instances\/[^/]+\/overview/)
                 })
         })
     })

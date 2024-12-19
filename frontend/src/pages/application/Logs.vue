@@ -15,7 +15,7 @@
                     value-key="id"
                     class="w-full"
                 />
-                <router-link v-if="instance?.meta" :to="{ name: 'Instance', params: { id: instance.id }}">
+                <router-link v-if="instance?.meta" :to="{ name: 'Instance', params: { id: instance.id, team_slug: team.slug }}">
                     <InstanceStatusBadge :status="instance.meta?.state" :pendingStateChange="instance?.pendingStateChange" :optimisticStateChange="instance.optimisticStateChange" class="ml-2" />
                 </router-link>
             </div>
@@ -29,6 +29,8 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 import SectionTopMenu from '../../components/SectionTopMenu.vue'
 import LogsShared from '../instance/components/InstanceLogs.vue'
 
@@ -56,6 +58,7 @@ export default {
         }
     },
     computed: {
+        ...mapState('account', ['team']),
         instance () {
             return this.instances.find((instance) => instance.id === this.input.instanceId)
         }

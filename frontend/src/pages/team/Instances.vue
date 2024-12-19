@@ -105,6 +105,7 @@
 <script>
 import { PlusSmIcon } from '@heroicons/vue/outline'
 import { markRaw } from 'vue'
+import { mapState } from 'vuex'
 
 import teamApi from '../../api/team.js'
 import EmptyState from '../../components/EmptyState.vue'
@@ -152,6 +153,9 @@ export default {
             ]
         }
     },
+    computed: {
+        ...mapState('account', ['team'])
+    },
     watch: {
         team: 'fetchData'
     },
@@ -174,7 +178,8 @@ export default {
             this.$router.push({
                 name: 'Instance',
                 params: {
-                    id: instance.id
+                    id: instance.id,
+                    team_slug: this.team.slug
                 }
             })
         }

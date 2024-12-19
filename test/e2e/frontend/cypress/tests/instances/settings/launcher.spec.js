@@ -1,9 +1,10 @@
 /// <reference types="Cypress" />
 describe('FlowFuse - Instance - Settings - Launcher', () => {
+    let team
     function navigateToInstanceSettings (teamName, projectName) {
         cy.request('GET', '/api/v1/user/teams')
             .then((response) => {
-                const team = response.body.teams.find(
+                team = response.body.teams.find(
                     (team) => team.name === teamName
                 )
                 return cy.request('GET', `/api/v1/teams/${team.id}/projects`)
@@ -12,7 +13,7 @@ describe('FlowFuse - Instance - Settings - Launcher', () => {
                 const project = response.body.projects.find(
                     (project) => project.name === projectName
                 )
-                cy.visit(`/instance/${project.id}/settings/general`)
+                cy.visit(`/team/${team.slug}/instances/${project.id}/settings/general`)
                 cy.wait('@getInstance')
             })
     }

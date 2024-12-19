@@ -26,6 +26,8 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 import InstanceRow from './InstanceRow.vue'
 
 export default {
@@ -40,6 +42,7 @@ export default {
     },
     emits: ['instance-deleted'],
     computed: {
+        ...mapState('account', ['team']),
         instances () {
             return Array.from(this.application.instances.values())
         },
@@ -55,7 +58,8 @@ export default {
             this.$router.push({
                 name: 'Instance',
                 params: {
-                    id: instance.id
+                    id: instance.id,
+                    team_slug: this.team.slug
                 }
             })
         }

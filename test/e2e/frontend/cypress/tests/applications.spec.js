@@ -55,7 +55,7 @@ describe('FlowForge - Applications', () => {
                 cy.contains(APPLICATION_NAME)
                 cy.contains(INSTANCE_NAME)
 
-                cy.url().should('include', '/instance/')
+                cy.url().should('include', '/instances/')
 
                 // now navigate to the Applications view and check the description is present alongside the application name
                 cy.visit(`/team/${team.slug}/applications`)

@@ -4,7 +4,7 @@
             <Loading />
         </template>
         <div v-else-if="canAccessTeam && team">
-            <Teleport v-if="mounted" to="#platform-banner">
+            <Teleport v-if="mounted && !isEmbeddedEditor" to="#platform-banner">
                 <div v-if="isVisitingAdmin" class="ff-banner" data-el="banner-team-as-admin">You are viewing this team as an Administrator</div>
                 <TeamSuspendedBanner v-if="team.suspended" :team="team" />
                 <SubscriptionExpiredBanner v-else :team="team" />
@@ -66,6 +66,9 @@ export default {
         },
         canAccessTeam: function () {
             return this.isAdminUser || this.teamMembership?.role >= Roles.Viewer
+        },
+        isEmbeddedEditor () {
+            return !!this.$route.matched.filter(m => m.name === 'instance-editor')
         }
     },
     mounted () {

@@ -73,10 +73,10 @@ const TokenFieldFormatter = {
 const InstanceFieldFormatter = {
     template: `
         <template v-if="instance">
-            <router-link :to="{ name: 'Instance', params: { id: instance }}">{{instanceName}}</router-link>
+            <router-link :to="{ name: 'Instance', params: { id: instance, team_slug: team.slug }}">{{instanceName}}</router-link>
         </template>
         <template v-else><span class="italic text-gray-500">Don't assign</span></template>`,
-    props: ['instance', 'instanceName']
+    props: ['instance', 'instanceName', 'team']
 }
 
 export default {

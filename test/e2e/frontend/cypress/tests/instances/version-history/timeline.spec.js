@@ -1,5 +1,6 @@
 describe('FlowForge - Version History', () => {
     let projectId
+    let team
 
     beforeEach(() => {
         cy.login('alice', 'aaPassword')
@@ -7,7 +8,7 @@ describe('FlowForge - Version History', () => {
 
         cy.request('GET', '/api/v1/teams/')
             .then((response) => {
-                const team = response.body.teams[0]
+                team = response.body.teams[0]
                 return cy.request('GET', `/api/v1/teams/${team.id}/projects`)
             })
             .then((response) => {
@@ -21,7 +22,7 @@ describe('FlowForge - Version History', () => {
             count: 0,
             snapshots: []
         }).as('getProjectSnapshots')
-        cy.visit(`/instance/${projectId}/overview`)
+        cy.visit(`/team/${team.slug}/instances/${projectId}/overview`)
 
         cy.get('[data-nav="instance-version-history"]').click()
 
@@ -52,7 +53,7 @@ describe('FlowForge - Version History', () => {
     it('The Timeline is not available for non licensed users', () => {
         const spy = cy.spy().as('historyRequest')
         cy.intercept('GET', '/api/*/projects/*/history', spy)
-        cy.visit(`/instance/${projectId}/version-history/timeline`)
+        cy.visit(`/team/${team.slug}/instances/${projectId}/version-history/timeline`)
 
         cy.contains('This is a FlowFuse Enterprise feature. Please upgrade your instance of FlowFuse in order to use it.')
         cy.contains('Timeline Not Available')

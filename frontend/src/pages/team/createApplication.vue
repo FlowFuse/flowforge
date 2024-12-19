@@ -109,7 +109,7 @@ export default {
 
                     await this.$store.dispatch('account/refreshTeam')
 
-                    this.$router.push({ name: 'Instance', params: { id: instance.id } })
+                    this.$router.push({ name: 'Instance', params: { id: instance.id, team_slug: this.team.slug } })
                 } catch (err) {
                     this.projectDetails = projectFields
                     if (err.response?.status === 409) {

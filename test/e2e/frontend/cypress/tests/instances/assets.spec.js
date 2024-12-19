@@ -1,8 +1,9 @@
 describe('FlowForge - Instance - Assets', () => {
+    let team
     function navigateToProject (teamName, projectName, tab = 'overview') {
         cy.request('GET', '/api/v1/user/teams')
             .then((response) => {
-                const team = response.body.teams.find(
+                team = response.body.teams.find(
                     (team) => team.name === teamName
                 )
 
@@ -17,7 +18,7 @@ describe('FlowForge - Instance - Assets', () => {
 
                 cy.wrap(instance.id).as('instanceId')
 
-                cy.visit(`/instance/${instance.id}/${tab}`)
+                cy.visit(`/team/${team.slug}/instances/${instance.id}/${tab}`)
 
                 cy.wait('@getAuditLog')
             })
@@ -69,8 +70,8 @@ describe('FlowForge - Instance - Assets', () => {
 
         cy.get('@instanceId')
             .then(instanceId => {
-                cy.visit(`/instance/${instanceId}/assets`)
-                cy.url().should('include', `/instance/${instanceId}/overview`)
+                cy.visit(`/team/${team.slug}/instances/${instanceId}/assets`)
+                cy.url().should('include', `/instances/${instanceId}/overview`)
             })
     })
 })

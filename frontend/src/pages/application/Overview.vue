@@ -194,7 +194,8 @@ export default {
             this.navigateTo({
                 name: 'Instance',
                 params: {
-                    id: cloudInstance.id
+                    id: cloudInstance.id,
+                    team_slug: this.team.slug
                 }
             }, event)
         },

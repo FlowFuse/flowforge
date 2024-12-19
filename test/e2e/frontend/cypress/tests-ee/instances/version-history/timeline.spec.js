@@ -11,6 +11,7 @@ import projectSnapshotRolledBack from '../../../fixtures/version-history/timelin
 
 describe('FlowForge - Version History', () => {
     let projectId
+    let team
 
     beforeEach(() => {
         cy.login('alice', 'aaPassword')
@@ -18,7 +19,7 @@ describe('FlowForge - Version History', () => {
 
         cy.request('GET', '/api/v1/teams/')
             .then((response) => {
-                const team = response.body.teams[0]
+                team = response.body.teams[0]
                 return cy.request('GET', `/api/v1/teams/${team.id}/projects`)
             })
             .then((response) => {
@@ -32,7 +33,7 @@ describe('FlowForge - Version History', () => {
             count: 0,
             snapshots: []
         }).as('getProjectSnapshots')
-        cy.visit(`/instance/${projectId}/overview`)
+        cy.visit(`/team/${team.slug}/instances/${projectId}/overview`)
 
         cy.get('[data-nav="instance-version-history"]').click()
 
@@ -62,7 +63,7 @@ describe('FlowForge - Version History', () => {
     it('The Timeline is not available for teams without the timeline feature enabled', () => {
         const spy = cy.spy().as('historyRequest')
         cy.intercept('GET', '/api/*/projects/*/history', spy)
-        cy.visit(`/instance/${projectId}/version-history/timeline`)
+        cy.visit(`/team/${team.slug}/instances/${projectId}/version-history/timeline`)
 
         cy.contains('This feature is not available for your current Team. Please upgrade your Team in order to use it.')
         cy.contains('Timeline Not Available')
@@ -73,7 +74,7 @@ describe('FlowForge - Version History', () => {
     describe('Timeline Feature enabled teams', () => {
         beforeEach(() => {
             cy.intercept('GET', '/api/*/teams/*/user', { role: 50 }).as('getTeamRole')
-            cy.intercept('GET', '/api/*/teams/*', (req) => {
+            cy.intercept('GET', '/api/*/teams/slug/*', (req) => {
                 req.reply((response) => {
                     // ensure we keep bom enabled
                     response.body.type.properties.features.projectHistory = true
@@ -82,7 +83,6 @@ describe('FlowForge - Version History', () => {
             }).as('getTeam')
 
             cy.login('alice', 'aaPassword')
-            cy.home()
         })
 
         it('have access to the timeline feature and correctly renders timeline events', () => {
@@ -100,9 +100,10 @@ describe('FlowForge - Version History', () => {
                 ]
             }).as('getHistory')
 
-            cy.visit(`/instance/${projectId}/version-history/timeline`)
+            cy.visit('/')
 
-            cy.wait('@getTeam')
+            cy.visit(`/team/${team.slug}/instances/${projectId}/version-history/timeline`)
+
             cy.wait('@getHistory')
 
             cy.get('[data-el="timeline-list"]').children().should('have.length', 7)
@@ -144,7 +145,7 @@ describe('FlowForge - Version History', () => {
                 ]
             }).as('getHistory')
 
-            cy.visit(`/instance/${projectId}/version-history/timeline`)
+            cy.visit(`/team/${team.slug}/instances/${projectId}/version-history/timeline`)
 
             cy.wait('@getTeam')
             cy.wait('@getHistory')
@@ -176,7 +177,7 @@ describe('FlowForge - Version History', () => {
                 .contains('Tatooine CNC Shop Snapshot deployed from instance-1-1')
                 .within(() => {
                     cy.contains('instance-1-1').click()
-                    cy.url().should('match', /^.*\/instance\/.*\/overview/)
+                    cy.url().should('match', /^.*\/instances\/.*\/overview/)
                 })
             cy.go('back')
 
@@ -241,7 +242,7 @@ describe('FlowForge - Version History', () => {
                 ]
             }).as('getHistory')
 
-            cy.visit(`/instance/${projectId}/version-history/timeline`)
+            cy.visit(`/team/${team.slug}/instances/${projectId}/version-history/timeline`)
 
             cy.wait('@getTeam')
             cy.wait('@getHistory')
@@ -272,7 +273,7 @@ describe('FlowForge - Version History', () => {
                 ]
             }).as('getHistory')
 
-            cy.visit(`/instance/${projectId}/version-history/timeline`)
+            cy.visit(`/team/${team.slug}/instances/${projectId}/version-history/timeline`)
 
             cy.wait('@getTeam')
             cy.wait('@getHistory')

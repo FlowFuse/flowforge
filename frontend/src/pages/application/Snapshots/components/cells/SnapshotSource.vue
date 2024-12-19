@@ -1,7 +1,7 @@
 <template>
     <div>
         <template v-if="ownerType==='instance'">
-            <router-link class="flex items-center" :to="{ name: 'Instance', params: { id: project.id }}">
+            <router-link class="flex items-center" :to="{ name: 'Instance', params: { id: project.id, team_slug: team.slug }}">
                 <IconNodeRedSolid class="ff-icon ff-icon-lg text-red-800 relative" />
                 <div class="flex flex-col ml-2">
                     <div class="text-xs text-gray-400">instance</div>
@@ -28,6 +28,8 @@
 
 <script>
 
+import { mapState } from 'vuex'
+
 import IconDeviceSolid from '../../../../../components/icons/DeviceSolid.js'
 import IconNodeRedSolid from '../../../../../components/icons/NodeRedSolid.js'
 
@@ -52,6 +54,9 @@ export default {
             type: Object,
             default: null
         }
+    },
+    computed: {
+        ...mapState('account', ['team'])
     }
 }
 </script>

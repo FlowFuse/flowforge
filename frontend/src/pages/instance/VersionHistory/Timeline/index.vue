@@ -49,6 +49,8 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+
 import projectHistoryAPI from '../../../../api/projectHistory.js'
 import EmptyState from '../../../../components/EmptyState.vue'
 import FeatureUnavailable from '../../../../components/banners/FeatureUnavailable.vue'
@@ -94,6 +96,7 @@ export default {
         }
     },
     computed: {
+        ...mapGetters('account', ['featuresCheck']),
         canLoadMore () {
             return this.next_cursor !== undefined
         },

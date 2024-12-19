@@ -46,7 +46,7 @@
         <div v-if="stage.instance || stage.device || stage.deviceGroup" class="py-3">
             <div>
                 <div v-if="stage.stageType == StageType.INSTANCE" class="ff-pipeline-stage-type">
-                    <router-link class="flex gap-2 items-center" :to="{name: 'Instance', params: { id: stage.instance.id }}">
+                    <router-link class="flex gap-2 items-center" :to="{name: 'Instance', params: { id: stage.instance.id, team_slug: team.slug }}">
                         <IconNodeRedSolid class="ff-icon ff-icon-lg text-red-800" />
                         <div>
                             <label class="flex items-center gap-2">Instance:</label>
@@ -72,7 +72,7 @@
                     </router-link>
                 </div>
                 <div v-if="stage.stageType == StageType.DEVICEGROUP" class="ff-pipeline-stage-type">
-                    <router-link class="flex gap-2 items-center" :to="{name: 'ApplicationDeviceGroupDevices', params: { applicationId: application.id, deviceGroupId: stage.deviceGroup.id }}">
+                    <router-link class="flex gap-2 items-center" :to="{name: 'ApplicationDeviceGroupDevices', params: { applicationId: application.id, deviceGroupId: stage.deviceGroup.id, team_slug: team.slug }}">
                         <IconDeviceGroupSolid class="ff-icon ff-icon-lg text-teal-700" />
                         <div>
                             <label class="flex items-center gap-2">Device Group:</label>
@@ -156,6 +156,7 @@
 
 <script>
 import { ExclamationIcon, LockClosedIcon, PencilAltIcon, PlayIcon, PlusCircleIcon, TrashIcon } from '@heroicons/vue/outline'
+import { mapState } from 'vuex'
 
 import PipelineAPI, { StageAction, StageType } from '../../api/pipeline.js'
 
@@ -213,6 +214,7 @@ export default {
     },
     emits: ['stage-deleted', 'stage-deploy-starting', 'stage-deploy-started', 'stage-deploy-failed'],
     computed: {
+        ...mapState('account', ['team']),
         deploying () {
             return this.stage.isDeploying
         },

@@ -246,7 +246,7 @@ describe('FlowForge - Notifications', () => {
 
                 cy.get('[data-el="generic-notification"]').contains('Node-RED Instance Crashed').click()
                 cy.wait('@markInvitationRead')
-                cy.url().should('match', /instance\/.*\/overview/)
+                cy.url().should('match', /instances\/.*\/overview/)
             })
         })
     })

@@ -162,7 +162,16 @@ const getters = {
             isMqttBrokerFeatureEnabledForTeam: !!state.team?.type?.properties?.features?.teamBroker,
 
             // DevOps Pipelines
-            devOpsPipelinesFeatureEnabledForPlatform: !!state.features?.['devops-pipelines']
+            devOpsPipelinesFeatureEnabledForPlatform: !!state.features?.['devops-pipelines'],
+
+            // Protected Instance
+            isProtectedInstanceFeatureEnabledForPlatform: !!state.features?.protectedInstance,
+            isProtectedInstanceFeatureEnabledForTeam: !!state.team?.type?.properties?.features?.protectedInstance,
+
+            // Email Alerts
+            isEmailAlertsFeatureEnabledForPlatform: !!state.features?.emailAlerts,
+            isEmailAlertsFeatureEnabledForTeam: !!state.team?.type?.properties?.features?.emailAlerts
+
         }
         return {
             ...preCheck,
@@ -174,7 +183,9 @@ const getters = {
             isBOMFeatureEnabled: preCheck.isBOMFeatureEnabledForPlatform && preCheck.isBOMFeatureEnabledForTeam,
             isTimelineFeatureEnabled: preCheck.isTimelineFeatureEnabledForPlatform && preCheck.isTimelineFeatureEnabledForTeam,
             isMqttBrokerFeatureEnabled: preCheck.isMqttBrokerFeatureEnabledForPlatform && preCheck.isMqttBrokerFeatureEnabledForTeam,
-            devOpsPipelinesFeatureEnabled: preCheck.devOpsPipelinesFeatureEnabledForPlatform
+            devOpsPipelinesFeatureEnabled: preCheck.devOpsPipelinesFeatureEnabledForPlatform,
+            isProtectedInstanceFeatureEnabled: preCheck.isProtectedInstanceFeatureEnabledForPlatform && preCheck.isProtectedInstanceFeatureEnabledForTeam,
+            isEmailAlertsFeatureEnabled: preCheck.isEmailAlertsFeatureEnabledForPlatform && preCheck.isEmailAlertsFeatureEnabledForTeam
         }
     }
 }

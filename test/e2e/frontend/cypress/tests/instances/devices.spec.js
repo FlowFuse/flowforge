@@ -1,8 +1,9 @@
 describe('FlowForge - Instance - Devices', () => {
+    let team
     function navigateToProject (teamName, projectName) {
         cy.request('GET', '/api/v1/user/teams')
             .then((response) => {
-                const team = response.body.teams.find(
+                team = response.body.teams.find(
                     (team) => team.name === teamName
                 )
                 return cy.request('GET', `/api/v1/teams/${team.id}/projects`)
@@ -11,7 +12,7 @@ describe('FlowForge - Instance - Devices', () => {
                 const instance = response.body.projects.find(
                     (project) => project.name === projectName
                 )
-                cy.visit(`/instance/${instance.id}/devices`)
+                cy.visit(`/team/${team.slug}/instances/${instance.id}/devices`)
                 cy.wait('@getInstanceRemoteInstances')
             })
     }
@@ -63,12 +64,13 @@ describe('FlowForge - Instance - Devices', () => {
 })
 
 describe('FlowForge shows audit logs', () => {
+    let team
     function navigateToInstance (teamName, projectName) {
         cy.intercept('GET', '/api/*/projects/*/audit-log*').as('getInstanceAuditLog')
 
         cy.request('GET', '/api/v1/user/teams')
             .then((response) => {
-                const team = response.body.teams.find(
+                team = response.body.teams.find(
                     (team) => team.name === teamName
                 )
                 return cy.request('GET', `/api/v1/teams/${team.id}/projects`)
@@ -77,7 +79,7 @@ describe('FlowForge shows audit logs', () => {
                 const instance = response.body.projects.find(
                     (project) => project.name === projectName
                 )
-                cy.visit(`/instance/${instance.id}/audit-log`)
+                cy.visit(`/team/${team.slug}/instances/${instance.id}/audit-log`)
                 cy.wait('@getInstanceAuditLog')
             })
     }

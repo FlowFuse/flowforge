@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
 
 import SectionSideMenu from '../../../components/SectionSideMenu.vue'
 import SectionTopMenu from '../../../components/SectionTopMenu.vue'
@@ -38,41 +38,50 @@ export default {
         }
     },
     emits: ['instance-updated', 'instance-confirm-delete', 'instance-confirm-suspend'],
-    data () {
-        return {
-            sideNavigation: []
-        }
-    },
     computed: {
-        ...mapState('account', ['team', 'teamMembership', 'features', 'settings'])
-    },
-    watch: {
-        teamMembership: 'checkAccess'
-    },
-    mounted () {
-        this.checkAccess()
-    },
-    methods: {
-        checkAccess: async function () {
-            this.sideNavigation = [
-                { name: 'General', path: './general' },
-                { name: 'Environment', path: './environment' }
+        ...mapState('account', ['team', 'teamMembership', 'features', 'settings']),
+        ...mapGetters('account', ['featuresCheck']),
+        sideNavigation () {
+            const hasPermissionToEditProject = this.hasPermission('project:edit')
+            return [
+                { name: 'General', path: { name: 'instance-settings-general' } },
+                { name: 'Environment', path: { name: 'instance-settings-environment' } },
+                {
+                    name: 'High Availability',
+                    path: { name: 'instance-settings-ha' },
+                    hidden: !hasPermissionToEditProject && !this.features.ha
+                },
+                {
+                    name: 'Protect Instance',
+                    path: { name: 'instance-settings-protect' },
+                    hidden: !hasPermissionToEditProject && !this.featuresCheck.isProtectedInstanceFeatureEnabled
+                },
+                {
+                    name: 'Editor',
+                    path: { name: 'instance-settings-editor' },
+                    hidden: !hasPermissionToEditProject
+                },
+                {
+                    name: 'Security',
+                    path: { name: 'instance-settings-security' },
+                    hidden: !hasPermissionToEditProject
+                },
+                {
+                    name: 'Palette',
+                    path: { name: 'instance-settings-palette' },
+                    hidden: !hasPermissionToEditProject
+                },
+                {
+                    name: 'Launcher',
+                    path: { name: 'instance-settings-launcher' },
+                    hidden: !hasPermissionToEditProject
+                },
+                {
+                    name: 'Alerts',
+                    path: { name: 'instance-settings-alerts' },
+                    hidden: !hasPermissionToEditProject && !this.featuresCheck.isEmailAlertsFeatureEnabled
+                }
             ]
-            if (this.hasPermission('project:edit')) {
-                if (this.features.ha) {
-                    this.sideNavigation.push({ name: 'High Availability', path: './ha' })
-                }
-                if (this.features.protectedInstance && this.team.type.properties.features?.protectedInstance) {
-                    this.sideNavigation.push({ name: 'Protect Instance', path: './protectInstance' })
-                }
-                this.sideNavigation.push({ name: 'Editor', path: './editor' })
-                this.sideNavigation.push({ name: 'Security', path: './security' })
-                this.sideNavigation.push({ name: 'Palette', path: './palette' })
-                this.sideNavigation.push({ name: 'Launcher', path: './launcher' })
-                if (this.features.emailAlerts && this.team.type.properties.features?.emailAlerts) {
-                    this.sideNavigation.push({ name: 'Alerts', path: './alerts' })
-                }
-            }
         }
     }
 }

@@ -77,7 +77,7 @@ export default {
         },
         url () {
             if (this.isImmersiveEditor) {
-                return this.$router.resolve({ name: 'instance-editor', params: { id: this.instance.id } }).fullPath
+                return this.$router.resolve({ name: 'instance-editor', params: { id: this.instance.id, team_slug: this.team.slug } }).fullPath
             }
 
             return this.editorURL

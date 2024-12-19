@@ -13,9 +13,10 @@ describe('FlowForge - Instances', () => {
             })
     }
     function navigateToInstance (teamName, projectName) {
+        let team
         cy.request('GET', '/api/v1/user/teams')
             .then((response) => {
-                const team = response.body.teams.find(
+                team = response.body.teams.find(
                     (team) => team.name === teamName
                 )
                 return cy.request('GET', `/api/v1/teams/${team.id}/projects`)
@@ -24,7 +25,7 @@ describe('FlowForge - Instances', () => {
                 const project = response.body.projects.find(
                     (project) => project.name === projectName
                 )
-                cy.visit(`/instance/${project.id}`)
+                cy.visit(`/team/${team.slug}/instances/${project.id}`)
             })
     }
 
@@ -63,7 +64,10 @@ describe('FlowForge - Instances', () => {
     it('can be deleted', () => {
         const INSTANCE_NAME = `new-instance-${Math.random().toString(36).substring(2, 7)}`
 
-        cy.intercept('DELETE', '/api/*/projects/*').as('deleteInstance')
+        cy.intercept('DELETE', '/api/*/projects/*', {
+            responseCode: 200,
+            responseBody: {}
+        }).as('deleteInstance')
 
         let team, application, template, stack, type
 
@@ -99,7 +103,7 @@ describe('FlowForge - Instances', () => {
                 cy.intercept('GET', '/api/*/projects/*').as('getInstance')
 
                 const project = response.body
-                cy.visit(`/instance/${project.id}/settings`)
+                cy.visit(`/team/${team.slug}/instances/${project.id}/settings`)
                 cy.wait('@getInstance')
 
                 cy.get('[data-el="delete-instance-dialog"]').should('not.be.visible')
@@ -281,7 +285,7 @@ describe('FlowForge - Instances', () => {
             .then((interception) => {
                 const instanceid = interception.response.body.id
 
-                cy.url().should('include', `/instance/${instanceid}/overview`)
+                cy.url().should('include', `/instances/${instanceid}/overview`)
 
                 cy.contains(INSTANCE_NAME)
                 cy.contains('application-1')

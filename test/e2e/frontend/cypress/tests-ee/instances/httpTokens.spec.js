@@ -2,9 +2,10 @@ describe('FlowFuse EE - HTTP Auth tokens', () => {
     let instance
 
     function navigateToInstanceSettings (teamName, instanceName) {
+        let team
         cy.request('GET', '/api/v1/user/teams')
             .then((response) => {
-                const team = response.body.teams.find(
+                team = response.body.teams.find(
                     (team) => team.name === teamName
                 )
                 return cy.request('GET', `/api/v1/teams/${team.id}/projects`)
@@ -13,7 +14,7 @@ describe('FlowFuse EE - HTTP Auth tokens', () => {
                 instance = response.body.projects.find(
                     (app) => app.name === instanceName
                 )
-                cy.visit(`/instance/${instance.id}/settings`)
+                cy.visit(`/team/${team.slug}/instances/${instance.id}/settings`)
                 cy.wait('@getInstance')
             })
     }

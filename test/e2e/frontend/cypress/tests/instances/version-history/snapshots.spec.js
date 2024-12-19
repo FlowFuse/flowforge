@@ -18,6 +18,7 @@ const MENU_ITEM_COUNT = idx
 
 describe('FlowForge - Instance Snapshots', () => {
     let projectId
+    let team
     beforeEach(() => {
         cy.intercept('GET', '/api/*/projects/*/snapshots').as('getProjectSnapshots')
 
@@ -26,26 +27,26 @@ describe('FlowForge - Instance Snapshots', () => {
 
         cy.request('GET', '/api/v1/teams/')
             .then((response) => {
-                const team = response.body.teams[0]
+                team = response.body.teams[0]
                 return cy.request('GET', `/api/v1/teams/${team.id}/projects`)
             })
             .then((response) => {
                 projectId = response.body.projects[0].id
-                cy.visit(`/instance/${projectId}/version-history/snapshots`)
+                cy.visit(`/team/${team.slug}/instances/${projectId}/version-history/snapshots`)
                 cy.wait('@getProjectSnapshots')
             })
     })
 
     it('shows a placeholder message when no snapshots have been created', () => {
         cy.intercept('GET', '/api/*/projects/*/snapshots', { count: 0, snapshots: [] }).as('getEmptyProjectSnapshots')
-        cy.visit(`/instance/${projectId}/version-history/snapshots`)
+        cy.visit(`/team/${team.slug}/instances/${projectId}/version-history/snapshots`)
         cy.wait('@getEmptyProjectSnapshots')
         cy.get('[data-el="empty-state"]').contains('h1', 'Create your First Snapshot')
     })
 
     it('provides functionality to create a snapshot', () => {
         cy.intercept('GET', '/api/*/projects/*/snapshots', { count: 0, snapshots: [] }).as('snapshotData')
-        cy.visit(`/instance/${projectId}/version-history/snapshots`)
+        cy.visit(`/team/${team.slug}/instances/${projectId}/version-history/snapshots`)
         cy.wait('@snapshotData')
 
         cy.get('[data-action="create-snapshot"]').click()
@@ -75,7 +76,7 @@ describe('FlowForge - Instance Snapshots', () => {
 
     it('offers correct options in snapshot table kebab menu', () => {
         cy.intercept('GET', '/api/*/projects/*/snapshots', instanceSnapshots).as('snapshotData')
-        cy.visit(`/instance/${projectId}/version-history/snapshots`)
+        cy.visit(`/team/${team.slug}/instances/${projectId}/version-history/snapshots`)
         cy.wait('@snapshotData')
 
         // click kebab menu in row 1
@@ -195,7 +196,7 @@ describe('FlowForge - Instance Snapshots', () => {
         // ensure the downloads folder is empty before the test
         cy.task('clearDownloads')
         cy.intercept('GET', '/api/*/projects/*/snapshots').as('snapshotData')
-        cy.visit(`/instance/${projectId}/version-history/snapshots`)
+        cy.visit(`/team/${team.slug}/instances/${projectId}/version-history/snapshots`)
         cy.wait('@snapshotData')
         // click kebab menu in row 1
         cy.get('[data-el="snapshots"] tbody').find('.ff-kebab-menu').eq(0).click()
@@ -392,7 +393,7 @@ describe('FlowForge - Instance Snapshots', () => {
     it('download snapshot package.json', () => {
         cy.intercept('GET', '/api/*/projects/*/snapshots', instanceSnapshots).as('snapshotData')
         cy.intercept('GET', '/api/*/snapshots/*', instanceSnapshot).as('instanceSnapshot')
-        cy.visit(`/instance/${projectId}/version-history/snapshots`)
+        cy.visit(`/team/${team.slug}/instances/${projectId}/version-history/snapshots`)
         cy.wait('@snapshotData')
 
         // ensure package.json does not exist in the downloads folder before the test
@@ -700,10 +701,11 @@ describe('FlowForge - Instance Snapshots', () => {
 })
 
 describe('FlowForge shows audit logs', () => {
+    let team
     function navigateToProject (teamName, projectName) {
         cy.request('GET', '/api/v1/user/teams')
             .then((response) => {
-                const team = response.body.teams.find(
+                team = response.body.teams.find(
                     (team) => team.name === teamName
                 )
                 return cy.request('GET', `/api/v1/teams/${team.id}/projects`)
@@ -712,7 +714,7 @@ describe('FlowForge shows audit logs', () => {
                 const project = response.body.projects.find(
                     (project) => project.name === projectName
                 )
-                cy.visit(`/instance/${project.id}/audit-log`)
+                cy.visit(`/team/${team.slug}/instances/${project.id}/audit-log`)
             })
     }
 

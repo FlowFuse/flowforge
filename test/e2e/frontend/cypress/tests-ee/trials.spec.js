@@ -37,7 +37,7 @@ describe('FlowForge - Trial Users', () => {
 
         cy.get('[data-action="create-project"]').should('not.be.disabled').click()
 
-        cy.url().should('include', '/instance/')
+        cy.url().should('match', /^.*\/team\/.*\/instances\/.*\/overview/)
     })
 
     it('cannot create a second instance', () => {

@@ -2,6 +2,8 @@
  * INFO: Instances were previously called projects, lots of the code still refers to an instance as a project
  * For all code under src/pages/instance project and instance are synonymous, but instance should be used going forward.
  */
+import { useStore } from 'vuex'
+
 import InstanceAssets from './Assets.vue'
 import InstanceAuditLog from './AuditLog.vue'
 import InstanceRemoteInstances from './Devices.vue'
@@ -59,9 +61,7 @@ const children = [
         meta: {
             title: 'Instance - Settings'
         },
-        redirect: to => {
-            return { name: 'instance-settings-general', params: { id: to.params.id } }
-        },
+        redirect: { name: 'instance-settings-general' },
         children: [...InstanceSettingsRoutes]
     },
     {
@@ -72,7 +72,12 @@ const children = [
             title: 'Instance - Version History'
         },
         redirect: to => {
-            return { name: 'instance-version-history-timeline', params: { id: to.params.id } }
+            const store = useStore()
+            let route = 'instance-version-history-timeline'
+            if (store && store?.state?.account?.teamMembership) {
+                route = 'instance-snapshots'
+            }
+            return { name: route, params: { id: to.params.id } }
         },
         children: [...VersionHistoryRoutes]
     }
@@ -82,16 +87,12 @@ export { children }
 
 export default [
     {
-        path: '/project/:id/:remaining*',
-        redirect: to => {
-            return { name: 'Instance', params: to.params }
-        }
+        path: 'project/:id/:remaining*',
+        redirect: { name: 'Instance' }
     },
     {
-        path: '/instance/:id/:remaining*',
-        redirect: to => {
-            return { name: 'instance-overview', params: { id: to.params.id } }
-        },
+        path: ':id/:remaining*',
+        redirect: { name: 'instance-overview' },
         name: 'Instance',
         component: Instance,
         meta: {

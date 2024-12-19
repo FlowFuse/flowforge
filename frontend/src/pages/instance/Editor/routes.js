@@ -8,16 +8,14 @@ import InstanceEditor from './index.vue'
 
 export default [
     {
-        path: '/instance/:id/editor',
+        path: ':id/editor',
         name: 'instance-editor',
         component: InstanceEditor,
         meta: {
             title: 'Instance - Editor',
             layout: 'plain'
         },
-        redirect: to => {
-            return { name: 'instance-editor-overview', params: { id: to.params.id } }
-        },
+        redirect: { name: 'instance-editor-overview' },
         children: [
             ...children.filter(child => !['settings', 'version-history'].includes(child.path)).map(child => {
                 return {

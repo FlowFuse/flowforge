@@ -43,9 +43,10 @@ function interceptFiles (files = [], directory = '', count = 0, meta = {}) {
 
 describe('FlowForge - Instance - Assets', () => {
     function navigateToProject (teamName, projectName, tab = 'overview') {
+        let team
         cy.request('GET', '/api/v1/user/teams')
             .then((response) => {
-                const team = response.body.teams.find(
+                team = response.body.teams.find(
                     (team) => team.name === teamName
                 )
                 return cy.request('GET', `/api/v1/teams/${team.id}/projects`)
@@ -54,7 +55,7 @@ describe('FlowForge - Instance - Assets', () => {
                 const instance = response.body.projects.find(
                     (project) => project.name === projectName
                 )
-                cy.visit(`/instance/${instance.id}/${tab}`)
+                cy.visit(`/team/${team.slug}/instances/${instance.id}/${tab}`)
                 cy.wait('@getUser')
             })
     }

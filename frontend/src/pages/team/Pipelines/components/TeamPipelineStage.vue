@@ -13,6 +13,8 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 import DeviceGroupSolidIcon from '../../../../components/icons/DeviceGroupSolid.js'
 import DeviceSolid from '../../../../components/icons/DeviceSolid.js'
 import IconNodeRedSolid from '../../../../components/icons/NodeRedSolid.js'
@@ -35,6 +37,7 @@ export default {
         }
     },
     computed: {
+        ...mapState('account', ['team']),
         isInstanceStage () {
             return Object.hasOwnProperty.call(this.stage, 'instances')
         },
@@ -71,11 +74,11 @@ export default {
         targetLink () {
             switch (true) {
             case this.isInstanceStage:
-                return { name: 'Instance', params: { id: this.targetId } }
+                return { name: 'Instance', params: { id: this.targetId, team_slug: this.team.slug } }
             case this.isDeviceStage:
                 return { name: 'Device', params: { id: this.targetId } }
             case this.isDeviceGroupsStage:
-                return { name: 'ApplicationDeviceGroupIndex', params: { deviceGroupId: this.targetId, applicationId: this.application.id } }
+                return { name: 'ApplicationDeviceGroupIndex', params: { deviceGroupId: this.targetId, applicationId: this.application.id, team_slug: this.team.slug } }
             default:
                 return '#'
             }
