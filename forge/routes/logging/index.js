@@ -47,6 +47,8 @@ module.exports = async function (app) {
         const auditEvent = request.body
         const event = auditEvent.event
         const error = auditEvent.error
+        const __launcherLog = auditEvent.__launcherLog || []
+        delete auditEvent.__launcherLog // dont add this to the audit log
 
         // Some node-red audit events are not useful to expose to the end user - filter them out here
         // api.error:version_mismatch - normal part of collision detection when trying to deploy flows
@@ -85,7 +87,15 @@ module.exports = async function (app) {
             await app.db.controllers.Project.addProjectModule(request.project, auditEvent.module, auditEvent.version || '*')
         } else if (event === 'crashed' || event === 'safe-mode') {
             if (app.config.features.enabled('emailAlerts')) {
-                await app.auditLog.alerts.generate(projectId, event)
+                const data = event === 'crashed'
+                    ? {
+                        exitCode: auditEvent.info?.code,
+                        exitSignal: auditEvent.info?.signal,
+                        exitInfo: auditEvent.info?.info,
+                        log: __launcherLog
+                    }
+                    : undefined
+                await app.auditLog.alerts.generate(projectId, event, data)
             }
             // send notification to all members and owners in the team
             const teamMembersAndOwners = await request.project.Team.getTeamMembers([Roles.Member, Roles.Owner])

@@ -3,7 +3,17 @@ module.exports = {
     text:
 `Hello
 
-Your FlowFuse Instance "{{{ name }}}"{{#if teamName.text}} in Team "{{{ teamName.text }}}"{{/if}} has crashed.
+Your FlowFuse Instance "{{{ name }}}" in Team "{{{ teamName.text }}}" has crashed due to an uncaught exception.
+
+This can occur for a number of reasons including:
+- an issue in your flows or function nodes
+- an issue in a third-party contribution node
+- an issue in Node-RED itself
+
+Possible solutions:
+- look out for async function calls in your function nodes that dont have error handling
+- check the issue tracker of the node that caused the crash
+- check the Node-RED issue tracker for similar issues
 
 {{#if log.text}}
 ------------------------------------------------------
@@ -27,7 +37,22 @@ You can access the instance and its logs here:
 `,
     html:
 `<p>Hello</p>
-<p>Your FlowFuse Instance "{{{ name }}}"{{#if teamName.html}} in Team "{{{ teamName.html }}}"{{/if}} has crashed.</p>
+<p>Your FlowFuse Instance "{{{ name }}}" in Team "{{{ teamName.html }}}" has crashed due to an uncaught exception.</p>
+
+<p>
+This can occur for a number of reasons including:
+<ul>
+<li>an issue in your flows or function nodes</li>
+<li>an issue in a third-party contribution node</li>
+<li>an issue in Node-RED itself</li>
+</ul>
+
+Possible solutions:
+<ul>
+<li>look out for async function calls in your function nodes that dont have error handling</li>
+<li>check the issue tracker of the node that caused the crash</li>
+<li>check the Node-RED issue tracker for similar issues</li>
+</p>
 
 {{#if log.html}}
 <p>

@@ -22,7 +22,7 @@ module.exports = (htmlContent) => {
                 style="border-collapse:collapse;font-family:Helvetica,Arial,sans-serif;font-size:15px;color:#33475b;word-break:break-word;padding-top:20px;padding-bottom:20px">
                 <div style="color:inherit;font-size:inherit;line-height:inherit">
                     <div style="padding-left:10px;padding-right:10px">
-                        <div style="min-width:280px;max-width:600px;Margin-left:auto;Margin-right:auto;border-collapse:collapse;border-spacing:0;background-color:#ffffff;background-image:url('https://flowfuse.com/images/600x70-HS-newsletter-header.png');background-position:center;background-repeat:no-repeat;background-size:100% 100%"
+                        <div style="min-width:540px;max-width:1200px;Margin-left:auto;Margin-right:auto;border-collapse:collapse;border-spacing:0;background-color:#ffffff;background-image:url('https://flowfuse.com/images/600x70-HS-newsletter-header.png');background-position:center;background-repeat:no-repeat;background-size:100% 100%"
                              bgcolor="#ffffff">
                             <div>
                                 <div style="color:inherit;font-size:inherit;line-height:inherit">
@@ -46,7 +46,7 @@ module.exports = (htmlContent) => {
                         </div>
                     </div>
                     <div style="padding-left:10px;padding-right:10px">
-                        <div style="min-width:280px;max-width:600px;Margin-left:auto;Margin-right:auto;border-collapse:collapse;border-spacing:0;background-color:#ffffff"
+                        <div style="min-width:540px;max-width:1200px;Margin-left:auto;Margin-right:auto;border-collapse:collapse;border-spacing:0;background-color:#ffffff"
                              bgcolor="#FFFFFF">
                             <div>
                                 <table role="presentation" cellpadding="0" cellspacing="0" width="100%"
@@ -68,7 +68,7 @@ module.exports = (htmlContent) => {
                     </div>
 
                     <div style="padding-left:10px;padding-right:10px">
-                        <div style="min-width:280px;max-width:600px;Margin-left:auto;Margin-right:auto;border-collapse:collapse;border-spacing:0;background-color:#ffffff"
+                        <div style="min-width:540px;max-width:1200px;Margin-left:auto;Margin-right:auto;border-collapse:collapse;border-spacing:0;background-color:#ffffff"
                              bgcolor="#FFFFFF">
                             <div>
                                 <table role="presentation" cellpadding="0" cellspacing="0" width="100%"
@@ -98,7 +98,7 @@ module.exports = (htmlContent) => {
                         </div>
                     </div>
                     <div style="padding-left:10px;padding-right:10px">
-                        <div style="min-width:280px;max-width:600px;Margin-left:auto;Margin-right:auto;border-collapse:collapse;border-spacing:0;padding-bottom:20px">
+                        <div style="min-width:540px;max-width:1200px;Margin-left:auto;Margin-right:auto;border-collapse:collapse;border-spacing:0;padding-bottom:20px">
                             <div>
                                 <div style="color:inherit;font-size:inherit;line-height:inherit">
                                     <table role="presentation" width="100%" cellpadding="0" cellspacing="0"
