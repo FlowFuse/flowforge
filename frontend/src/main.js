@@ -12,6 +12,7 @@ import VueShepherdPlugin from 'vue-shepherd'
 import App from './App.vue'
 import Loading from './components/Loading.vue'
 import SectionNavigationHeader from './components/SectionNavigationHeader.vue'
+import TeamLink from './components/router-links/TeamLink.vue'
 import PageLayout from './layouts/Page.vue'
 import router from './routes.js'
 import Alerts from './services/alerts.js'
@@ -38,6 +39,7 @@ app.component('lottie-animation', LottieAnimation)
 app.component('ff-page', PageLayout)
 app.component('ff-page-header', SectionNavigationHeader)
 app.component('ff-loading', Loading)
+app.component('ff-team-link', TeamLink)
 
 app.config.errorHandler = function (err, vm, info) {
     // Uncaught XHR errors bubble to here

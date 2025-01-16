@@ -53,7 +53,7 @@
                 </p>
                 <p class="my-4">
                     If you want your device to be automatically registered to an instance, in order to remotely deploy flows, you can use provisioning tokens
-                    in your <router-link :to="{'name': 'TeamSettingsDevices', 'params': {team_slug: team.slug}}">Team Settings</router-link>
+                    in your <ff-team-link :to="{'name': 'TeamSettingsDevices', 'params': {team_slug: team.slug}}">Team Settings</ff-team-link>
                 </p>
                 <p class="my-4">
                     Further info on Devices can be found

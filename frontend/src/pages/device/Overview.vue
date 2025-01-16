@@ -32,9 +32,9 @@
             <template #content>
                 <InfoCardRow property="Application:">
                     <template #value>
-                        <router-link v-if="device?.application" :to="{name: 'Application', params: { id: device.application.id, team_slug: team.slug }}">
+                        <ff-team-link v-if="device?.application" :to="{name: 'Application', params: { id: device.application.id }}">
                             {{ device.application?.name }}
-                        </router-link>
+                        </ff-team-link>
                         <span v-else>None</span>
                     </template>
                 </InfoCardRow>

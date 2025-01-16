@@ -239,7 +239,7 @@ export default [
                         backTo: ({ team }) => {
                             return {
                                 label: 'Back to Dashboard',
-                                to: { name: 'Team', params: { team_slug: team.slug } }
+                                to: { name: 'Team', params: { team_slug: team?.slug } }
                             }
                         }
                     }

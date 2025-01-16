@@ -70,12 +70,12 @@
                     <template #header>Get Started with your First Node-RED Instance</template>
                     <template #message>
                         <p>
-                            Instances are managed in FlowFuse via <router-link
+                            Instances are managed in FlowFuse via <ff-team-link
                                 class="ff-link"
                                 :to="{name:'Applications', params: {team_slug: team.slug}}"
                             >
                                 Applications
-                            </router-link>.
+                            </ff-team-link>.
                         </p>
                         <p>
                             You can create your first Instance when creating your first Application, or add an Instance to an existing Application if you have one.
