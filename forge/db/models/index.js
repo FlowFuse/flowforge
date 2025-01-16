@@ -80,7 +80,8 @@ const modelTypes = [
     'BrokerClient',
     'OAuthSession',
     'Notification',
-    'TeamBrokerClient'
+    'TeamBrokerClient',
+    'BrokerCredentials'
 ]
 
 // A local map of the known models.

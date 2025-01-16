@@ -350,4 +350,278 @@ module.exports = async function (app) {
         const list = await app.teamBroker.getUsedTopics(request.team.hashid)
         reply.send(list)
     })
+
+    /**
+     * Get All Credentials for 3rd Party Brokers linked to a team
+     * @name /api/v1/teams:/teamId/broker/credentials
+     * @static
+     * @memberof forge.routes.api.team.broker
+     */
+    app.get('/credentials', {
+        preHandler: app.needsPermission('broker:credentials:list'),
+        schema: {
+            summary: 'Get credentials for 3rd party MQTT brokers',
+            tags: ['MQTT Broker'],
+            params: {
+                type: 'object',
+                properties: {
+                    teamId: { type: 'string' }
+                }
+            },
+            response: {
+                200: {
+                    type: 'object',
+                    properties: {
+
+                    },
+                    additionalProperties: true
+                },
+                '4xx': {
+                    $ref: 'APIError'
+                },
+                500: {
+                    $ref: 'APIError'
+                }
+            }
+        }
+    }, async (request, reply) => {
+        const creds = app.db.model.BrokerCredentials.byTeam(request.params.teamId)
+        // TODO need a view to strip out the actual credentials
+        reply.send(creds)
+    })
+
+    /**
+     * Add new Credentials for a 3rd Party Broker
+     */
+    app.post('/credentials', {
+        preHandler: app.needsPermission('broker:credentials:create'),
+        schema: {
+            summary: 'Create credentials for a 3rd party MQTT broker',
+            tags: ['MQTT Broker'],
+            params: {
+                type: 'object',
+                properties: {
+                    teamId: { type: 'string' }
+                }
+            },
+            body: {
+                type: 'object',
+                properties: {
+                    name: { type: 'string' },
+                    host: { type: 'string' },
+                    port: { type: 'number' },
+                    protocol: { type: 'string' },
+                    protocolVersion: { type: 'number' },
+                    ssl: { type: 'boolean' },
+                    verifySSL: { type: 'boolean' },
+                    clientId: { type: 'string' },
+                    credentials: {
+                        type: 'object'
+                    }
+                }
+            },
+            response: {
+                200: {
+                    type: 'object',
+                    properties: {
+
+                    },
+                    additionalProperties: true
+                },
+                '4xx': {
+                    $ref: 'APIError'
+                },
+                500: {
+                    $ref: 'APIError'
+                }
+            }
+        }
+    }, async (request, reply) => {
+        const input = request.body
+        input.credentials = JSON.stringify(request.body.credentials)
+        input.TeamId = app.db.models.Team.decodeHashid(request.params.teamId)
+        const creds = await app.db.models.BrokerCredentials.create(input)
+        const clean = app.db.views.BrokerCredentials.clean(creds)
+        reply.send(clean)
+    })
+
+    /**
+     * Get Credentials for a 3rd Party Broker
+     * @name /api/v1/teams/:teamId/broker/:brokerId/creds
+     * @static
+     * @memberof forge.routes.api.team.broker
+     */
+    app.get('/:brokerId/credentials', {
+        preHandler: [
+            async (request, reply) => {
+                // TODO Needs custom preHandler to work with token for mqtt agent only
+            }
+        ],
+        schema: {
+            summary: 'Gets credentials for a 3rd party MQTT broker',
+            tags: ['MQTT Broker'],
+            params: {
+                type: 'object',
+                properties: {
+                    teamId: { type: 'string' },
+                    brokerId: { type: 'string' }
+                }
+            },
+            response: {
+                200: {
+                    type: 'object',
+                    properties: {
+
+                    },
+                    additionalProperties: true
+                },
+                '4xx': {
+                    $ref: 'APIError'
+                },
+                500: {
+                    $ref: 'APIError'
+                }
+            }
+        }
+    }, async (request, reply) => {
+        console.log(request.params)
+        const creds = await app.db.models.BrokerCredentials.byId(request.params.brokerId)
+        if (creds) {
+            const resp = creds.toJSON()
+            resp.id = resp.hashid
+            delete resp.hashid
+            delete resp.slug
+            delete resp.links
+            resp.credentials = JSON.parse(resp.credentials)
+            reply.send(resp)
+        } else {
+            reply.status(404).send({})
+        }
+    })
+
+    /**
+     * Edit 3rd Party Broker credentials
+     */
+    app.put('/:brokerId/credentials', {
+        preHandler: app.needsPermission('broker:credentials:edit'),
+        schema: {
+            summary: 'Delete credentials for a 3rd party MQTT broker',
+            tags: ['MQTT Broker'],
+            params: {
+                type: 'object',
+                properties: {
+                    teamId: { type: 'string' },
+                    brokerId: { type: 'string' }
+                }
+            },
+            response: {
+                200: {
+                    type: 'object',
+                    properties: {
+
+                    },
+                    additionalProperties: true
+                },
+                '4xx': {
+                    $ref: 'APIError'
+                },
+                500: {
+                    $ref: 'APIError'
+                }
+            }
+        }
+    }, async (request, reply) => {
+
+    })
+
+    /**
+     * Remove 3rd Party Broker credentials
+     */
+    app.delete('/:brokerId/credentials', {
+        preHandler: app.needsPermission('broker:credentials:delete'),
+        schema: {
+            summary: 'Delete credentials for a 3rd party MQTT broker',
+            tags: ['MQTT Broker'],
+            params: {
+                type: 'object',
+                properties: {
+                    teamId: { type: 'string' },
+                    brokerId: { type: 'string' }
+                }
+            },
+            response: {
+                200: {
+                    type: 'object',
+                    properties: {
+
+                    },
+                    additionalProperties: true
+                },
+                '4xx': {
+                    $ref: 'APIError'
+                },
+                500: {
+                    $ref: 'APIError'
+                }
+            }
+        }
+    }, async (request, reply) => {
+        const creds = await app.db.models.BrokerCredentials.byId(request.params.brokerId)
+        if (creds) {
+            try {
+                await creds.destroy()
+                reply.send({})
+            } catch (err) {
+                reply.status(500).send({ error: '', message: '' })
+            }
+        } else {
+            reply.status(404).send({})
+        }
+    })
+
+    /**
+     * Store Topics from a 3rd Party Broker
+     * @name /api/v1/teams/:teamId/broker/:brokerId/topics
+     * @static
+     * @memberof forge.routes.api.team.broker
+     */
+    app.post('/:brokerId/topics', {
+        preHandler: app.needsPermission('broker:topics:list'),
+        schema: {
+            summary: 'Store Topics from a 3rd party MQTT broker',
+            tags: ['MQTT Broker'],
+            params: {
+                type: 'object',
+                properties: {
+                    teamId: { type: 'string' },
+                    brokerId: { type: 'string' }
+                }
+            },
+            body: {
+                type: 'object',
+                properties: {
+
+                },
+                additionalProperties: true
+            },
+            response: {
+                200: {
+                    type: 'object',
+                    properties: {
+
+                    },
+                    additionalProperties: true
+                },
+                '4xx': {
+                    $ref: 'APIError'
+                },
+                500: {
+                    $ref: 'APIError'
+                }
+            }
+        }
+    }, async (request, reply) => {
+        console.log(request.body)
+        reply.send({})
+    })
 }
