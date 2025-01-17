@@ -114,20 +114,22 @@ describe('FlowForge - Devices', () => {
 
                         if (kind === 'application' || kind === 'instance') {
                             // select 'application-2'
-                            cy.get('[data-form="application"] .ff-dropdown').should('be.visible')
+                            cy.get('[data-form="application"] .ff-listbox').should('be.visible')
                             cy.get('[data-form="application"]').within(() => {
                                 // eslint-disable-next-line cypress/require-data-selectors
-                                cy.get('.ff-dropdown[disabled=false]').click()
+                                cy.get('.ff-listbox').should('not.be.disabled')
+                                cy.get('.ff-listbox').click()
                                 // eslint-disable-next-line cypress/require-data-selectors
-                                cy.get('.ff-dropdown-options > .ff-dropdown-option').contains('application-2').click()
+                                cy.get('.ff-options > .ff-option').contains('application-2').click()
                             })
                             if (kind === 'instance') {
                                 // Select 'instance-2-1'
-                                cy.get('[data-form="instance"] .ff-dropdown').should('be.visible')
+                                cy.get('[data-form="instance"] .ff-listbox').should('be.visible')
                                 cy.get('[data-form="instance"]').within(() => {
-                                    cy.get('.ff-dropdown[disabled=false]').click()
+                                    cy.get('.ff-listbox').should('not.be.disabled')
+                                    cy.get('.ff-listbox').click()
                                     // eslint-disable-next-line cypress/require-data-selectors
-                                    cy.get('.ff-dropdown-options > .ff-dropdown-option').contains('instance-2-1').click()
+                                    cy.get('.ff-options > .ff-option').contains('instance-2-1').click()
                                 })
                             }
                         }

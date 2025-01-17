@@ -58,15 +58,15 @@ describe('FlowForge - Application - DevOps Pipelines', () => {
 
         cy.get('[data-form="stage-name"] input[type="text"]').type('Stage 1')
 
-        cy.get('[data-form="stage-instance"] .ff-dropdown').click()
-        cy.get('[data-form="stage-instance"] .ff-dropdown-options').should('be.visible')
-        cy.get('[data-form="stage-instance"] .ff-dropdown-options > .ff-dropdown-option:first').click()
+        cy.get('[data-form="stage-instance"] .ff-listbox').click()
+        cy.get('[data-form="stage-instance"] .ff-options').should('be.visible')
+        cy.get('[data-form="stage-instance"] .ff-options > .ff-option:first').click()
 
-        cy.get('[data-form="stage-action"] .ff-dropdown').click()
-        cy.get('[data-form="stage-action"] .ff-dropdown-options').should('be.visible')
+        cy.get('[data-form="stage-action"] .ff-listbox').click()
+        cy.get('[data-form="stage-action"] .ff-options').should('be.visible')
         // First stage should not have 'do nothing' as an option
-        cy.get('[data-form="stage-action"] .ff-dropdown-options > .ff-dropdown-option:contains("Do nothing")').should('not.exist')
-        cy.get('[data-form="stage-action"] .ff-dropdown-options > .ff-dropdown-option:contains("Create new instance snapshot")').click()
+        cy.get('[data-form="stage-action"] .ff-options > .ff-option:contains("Do nothing")').should('not.exist')
+        cy.get('[data-form="stage-action"] .ff-options > .ff-option:contains("Create new instance snapshot")').click()
 
         cy.get('[data-action="add-stage"]').click()
 
@@ -77,15 +77,18 @@ describe('FlowForge - Application - DevOps Pipelines', () => {
 
         cy.get('[data-form="stage-name"] input[type="text"]').type('Stage 2')
 
-        cy.get('[data-form="stage-instance"] .ff-dropdown').click()
-        cy.get('[data-form="stage-instance"] .ff-dropdown-options').should('be.visible')
-        // Last stage should have 'do nothing' as an option
-        cy.get('[data-form="stage-action"] .ff-dropdown-options > .ff-dropdown-option:contains("Do nothing")').should('exist')
-        cy.get('[data-form="stage-instance"] .ff-dropdown-options > .ff-dropdown-option:first').click()
+        cy.get('[data-form="stage-instance"] .ff-listbox').click()
+        cy.get('[data-form="stage-instance"] .ff-options').should('be.visible')
+        cy.get('[data-form="stage-instance"] .ff-options .ff-option').click()
 
-        cy.get('[data-form="stage-action"] .ff-dropdown').click()
-        cy.get('[data-form="stage-action"] .ff-dropdown-options').should('be.visible')
-        cy.get('[data-form="stage-action"] .ff-dropdown-options > .ff-dropdown-option:last').click()
+        // Last stage should have 'do nothing' as an option
+        cy.get('[data-form="stage-action"] .ff-listbox').click()
+        cy.get('[data-form="stage-action"] .ff-options > .ff-option:contains("Do nothing")').should('exist')
+        cy.get('[data-form="stage-action"] .ff-options > .ff-option:first').click()
+
+        cy.get('[data-form="stage-action"] .ff-listbox').click()
+        cy.get('[data-form="stage-action"] .ff-options').should('be.visible')
+        cy.get('[data-form="stage-action"] .ff-options > .ff-option:last').click()
 
         cy.get('[data-action="add-stage"]').click()
 
@@ -131,13 +134,13 @@ describe('FlowForge - Application - DevOps Pipelines', () => {
 
         cy.get('[data-form="stage-name"] input[type="text"]').type(`Stage 1 for ${PIPELINE_NAME}`)
 
-        cy.get('[data-form="stage-instance"] .ff-dropdown').click()
-        cy.get('[data-form="stage-instance"] .ff-dropdown-options').should('be.visible')
-        cy.get('[data-form="stage-instance"] .ff-dropdown-options > .ff-dropdown-option:first').click()
+        cy.get('[data-form="stage-instance"] .ff-listbox').click()
+        cy.get('[data-form="stage-instance"] .ff-options').should('be.visible')
+        cy.get('[data-form="stage-instance"] .ff-options > .ff-option:first').click()
 
-        cy.get('[data-form="stage-action"] .ff-dropdown').click()
-        cy.get('[data-form="stage-action"] .ff-dropdown-options').should('be.visible')
-        cy.get('[data-form="stage-action"] .ff-dropdown-options > .ff-dropdown-option:last').click() // prompt
+        cy.get('[data-form="stage-action"] .ff-listbox').click()
+        cy.get('[data-form="stage-action"] .ff-options').should('be.visible')
+        cy.get('[data-form="stage-action"] .ff-options > .ff-option:last').click() // prompt
 
         cy.get('[data-action="add-stage"]').click()
 
@@ -154,17 +157,20 @@ describe('FlowForge - Application - DevOps Pipelines', () => {
             expect(stageName).to.equal(`Stage 1 for ${PIPELINE_NAME}`)
         })
 
-        cy.get('[data-form="stage-instance"] .ff-dropdown-selected').should('contain', 'instance-2-1')
+        cy.get('[data-form="stage-instance"] .ff-listbox').click()
+        cy.get('[data-form="stage-instance"] .ff-option-content.active').should('contain', 'instance-2-1')
 
-        cy.get('[data-form="stage-instance"] .ff-dropdown').click()
-        cy.get('[data-form="stage-instance"] .ff-dropdown-options').should('be.visible')
-        cy.get('[data-form="stage-instance"] .ff-dropdown-options > .ff-dropdown-option:last').click()
+        cy.get('[data-form="stage-instance"] .ff-listbox').click()
+        cy.get('[data-form="stage-instance"] .ff-options').should('be.visible')
+        cy.get('[data-form="stage-instance"] .ff-options > .ff-option:last').click()
 
-        cy.get('[data-form="stage-instance"] .ff-dropdown-selected').should('contain', 'instance-2-with-devices')
+        cy.get('[data-form="stage-instance"] .ff-listbox').click()
+        cy.get('[data-form="stage-instance"] .ff-option-content.active').should('contain', 'instance-2-with-devices')
 
         // First stage should not have 'do nothing' as an option
-        cy.get('[data-form="stage-action"] .ff-dropdown-options > .ff-dropdown-option:contains("Do nothing")').should('not.exist')
-        cy.get('[data-form="stage-action"] .ff-dropdown-selected').should('contain', 'Prompt to select instance snapshot')
+        cy.get('[data-form="stage-action"] .ff-listbox').click()
+        cy.get('[data-form="stage-action"] .ff-options > .ff-option:contains("Do nothing")').should('not.exist')
+        cy.get('[data-form="stage-action"] .ff-option-content.active').should('contain', 'Prompt to select instance snapshot')
 
         cy.get('[data-action="add-stage"]').click()
 
@@ -200,14 +206,14 @@ describe('FlowForge - Application - DevOps Pipelines', () => {
         cy.get('[data-form="stage-name"] input[type="text"]').type('Stage 1')
 
         // Select Instance for Stage 1
-        cy.get('[data-form="stage-instance"] .ff-dropdown').click()
-        cy.get('[data-form="stage-instance"] .ff-dropdown-options').should('be.visible')
-        cy.get('[data-form="stage-instance"] .ff-dropdown-options > .ff-dropdown-option:first').click()
+        cy.get('[data-form="stage-instance"] .ff-listbox').click()
+        cy.get('[data-form="stage-instance"] .ff-options').should('be.visible')
+        cy.get('[data-form="stage-instance"] .ff-options > .ff-option:first').click()
 
         // Select "Create new Snapshot"
-        cy.get('[data-form="stage-action"] .ff-dropdown').click()
-        cy.get('[data-form="stage-action"] .ff-dropdown-options').should('be.visible')
-        cy.get('[data-form="stage-action"] .ff-dropdown-options > .ff-dropdown-option:contains("Create new instance snapshot")').click() // prompt
+        cy.get('[data-form="stage-action"] .ff-listbox').click()
+        cy.get('[data-form="stage-action"] .ff-options').should('be.visible')
+        cy.get('[data-form="stage-action"] .ff-options > .ff-option:contains("Create new instance snapshot")').click() // prompt
 
         cy.get('[data-action="add-stage"]').click()
 
@@ -218,13 +224,13 @@ describe('FlowForge - Application - DevOps Pipelines', () => {
 
         cy.get('[data-form="stage-name"] input[type="text"]').type('Stage 2')
 
-        cy.get('[data-form="stage-instance"] .ff-dropdown').click()
-        cy.get('[data-form="stage-instance"] .ff-dropdown-options').should('be.visible')
-        cy.get('[data-form="stage-instance"] .ff-dropdown-options > .ff-dropdown-option:first').click()
+        cy.get('[data-form="stage-instance"] .ff-listbox').click()
+        cy.get('[data-form="stage-instance"] .ff-options').should('be.visible')
+        cy.get('[data-form="stage-instance"] .ff-options > .ff-option:first').click()
 
-        cy.get('[data-form="stage-action"] .ff-dropdown').click()
-        cy.get('[data-form="stage-action"] .ff-dropdown-options').should('be.visible')
-        cy.get('[data-form="stage-action"] .ff-dropdown-options > .ff-dropdown-option:first').click()
+        cy.get('[data-form="stage-action"] .ff-listbox').click()
+        cy.get('[data-form="stage-action"] .ff-options').should('be.visible')
+        cy.get('[data-form="stage-action"] .ff-options > .ff-option:first').click()
 
         cy.get('[data-action="add-stage"]').click()
 
@@ -288,13 +294,13 @@ describe('FlowForge - Application - DevOps Pipelines', () => {
 
         cy.get('[data-form="stage-name"] input[type="text"]').type('Stage 1')
 
-        cy.get('[data-form="stage-instance"] .ff-dropdown').click()
-        cy.get('[data-form="stage-instance"] .ff-dropdown-options').should('be.visible')
-        cy.get('[data-form="stage-instance"] .ff-dropdown-options > .ff-dropdown-option:first').click()
+        cy.get('[data-form="stage-instance"] .ff-listbox').click()
+        cy.get('[data-form="stage-instance"] .ff-options').should('be.visible')
+        cy.get('[data-form="stage-instance"] .ff-options > .ff-option:first').click()
 
-        cy.get('[data-form="stage-action"] .ff-dropdown').click()
-        cy.get('[data-form="stage-action"] .ff-dropdown-options').should('be.visible')
-        cy.get('[data-form="stage-action"] .ff-dropdown-options > .ff-dropdown-option:contains("Prompt")').click() // prompt
+        cy.get('[data-form="stage-action"] .ff-listbox').click()
+        cy.get('[data-form="stage-action"] .ff-options').should('be.visible')
+        cy.get('[data-form="stage-action"] .ff-options > .ff-option:contains("Prompt")').click() // prompt
 
         cy.get('[data-action="add-stage"]').click()
 
@@ -325,13 +331,13 @@ describe('FlowForge - Application - DevOps Pipelines', () => {
 
             cy.get('[data-form="stage-name"] input[type="text"]').type('Stage 2')
 
-            cy.get('[data-form="stage-instance"] .ff-dropdown').click()
-            cy.get('[data-form="stage-instance"] .ff-dropdown-options').should('be.visible')
-            cy.get('[data-form="stage-instance"] .ff-dropdown-options > .ff-dropdown-option:first').click()
+            cy.get('[data-form="stage-instance"] .ff-listbox').click()
+            cy.get('[data-form="stage-instance"] .ff-options').should('be.visible')
+            cy.get('[data-form="stage-instance"] .ff-options > .ff-option:first').click()
 
-            cy.get('[data-form="stage-action"] .ff-dropdown').click()
-            cy.get('[data-form="stage-action"] .ff-dropdown-options').should('be.visible')
-            cy.get('[data-form="stage-action"] .ff-dropdown-options > .ff-dropdown-option:first').click()
+            cy.get('[data-form="stage-action"] .ff-listbox').click()
+            cy.get('[data-form="stage-action"] .ff-options').should('be.visible')
+            cy.get('[data-form="stage-action"] .ff-options > .ff-option:first').click()
 
             cy.get('[data-action="add-stage"]').click()
 
@@ -399,13 +405,13 @@ describe('FlowForge - Application - DevOps Pipelines', () => {
 
         cy.get('[data-form="stage-name"] input[type="text"]').type('Stage 1')
 
-        cy.get('[data-form="stage-device"] .ff-dropdown').click()
-        cy.get('[data-form="stage-device"] .ff-dropdown-options').should('be.visible')
-        cy.get('[data-form="stage-device"] .ff-dropdown-options > .ff-dropdown-option:first').click()
+        cy.get('[data-form="stage-device"] .ff-listbox').click()
+        cy.get('[data-form="stage-device"] .ff-options').should('be.visible')
+        cy.get('[data-form="stage-device"] .ff-options > .ff-option:first').click()
 
-        cy.get('[data-form="stage-action"] .ff-dropdown').click()
-        cy.get('[data-form="stage-action"] .ff-dropdown-options').should('be.visible')
-        cy.get('[data-form="stage-action"] .ff-dropdown-options > .ff-dropdown-option:contains("active")').click() // Use active snapshot
+        cy.get('[data-form="stage-action"] .ff-listbox').click()
+        cy.get('[data-form="stage-action"] .ff-options').should('be.visible')
+        cy.get('[data-form="stage-action"] .ff-options > .ff-option:contains("active")').click() // Use active snapshot
 
         cy.get('[data-action="add-stage"]').click()
 
@@ -416,13 +422,13 @@ describe('FlowForge - Application - DevOps Pipelines', () => {
 
         cy.get('[data-form="stage-name"] input[type="text"]').type('Stage 2')
 
-        cy.get('[data-form="stage-instance"] .ff-dropdown').click()
-        cy.get('[data-form="stage-instance"] .ff-dropdown-options').should('be.visible')
-        cy.get('[data-form="stage-instance"] .ff-dropdown-options > .ff-dropdown-option:first').click()
+        cy.get('[data-form="stage-instance"] .ff-listbox').click()
+        cy.get('[data-form="stage-instance"] .ff-options').should('be.visible')
+        cy.get('[data-form="stage-instance"] .ff-options > .ff-option:first').click()
 
-        cy.get('[data-form="stage-action"] .ff-dropdown').click()
-        cy.get('[data-form="stage-action"] .ff-dropdown-options').should('be.visible')
-        cy.get('[data-form="stage-action"] .ff-dropdown-options > .ff-dropdown-option:first').click()
+        cy.get('[data-form="stage-action"] .ff-listbox').click()
+        cy.get('[data-form="stage-action"] .ff-options').should('be.visible')
+        cy.get('[data-form="stage-action"] .ff-options > .ff-option:first').click()
 
         cy.get('[data-action="add-stage"]').click()
 
@@ -504,13 +510,13 @@ describe('FlowForge - Application - DevOps Pipelines', () => {
 
         cy.get('[data-form="stage-name"] input[type="text"]').type('Stage 1')
 
-        cy.get('[data-form="stage-instance"] .ff-dropdown').click()
-        cy.get('[data-form="stage-instance"] .ff-dropdown-options').should('be.visible')
-        cy.get('[data-form="stage-instance"] .ff-dropdown-options > .ff-dropdown-option:first').click()
+        cy.get('[data-form="stage-instance"] .ff-listbox').click()
+        cy.get('[data-form="stage-instance"] .ff-options').should('be.visible')
+        cy.get('[data-form="stage-instance"] .ff-options > .ff-option:first').click()
 
-        cy.get('[data-form="stage-action"] .ff-dropdown').click()
-        cy.get('[data-form="stage-action"] .ff-dropdown-options').should('be.visible')
-        cy.get('[data-form="stage-action"] .ff-dropdown-options > .ff-dropdown-option:contains("Create new instance snapshot")').click()
+        cy.get('[data-form="stage-action"] .ff-listbox').click()
+        cy.get('[data-form="stage-action"] .ff-options').should('be.visible')
+        cy.get('[data-form="stage-action"] .ff-options > .ff-option:contains("Create new instance snapshot")').click()
 
         cy.get('[data-action="add-stage"]').click()
 
@@ -522,13 +528,13 @@ describe('FlowForge - Application - DevOps Pipelines', () => {
 
         cy.get('[data-form="stage-name"] input[type="text"]').type('Stage 2')
 
-        cy.get('[data-form="stage-device"] .ff-dropdown').click()
-        cy.get('[data-form="stage-device"] .ff-dropdown-options').should('be.visible')
-        cy.get('[data-form="stage-device"] .ff-dropdown-options > .ff-dropdown-option:first').click()
+        cy.get('[data-form="stage-device"] .ff-listbox').click()
+        cy.get('[data-form="stage-device"] .ff-options').should('be.visible')
+        cy.get('[data-form="stage-device"] .ff-options > .ff-option:first').click()
 
-        cy.get('[data-form="stage-action"] .ff-dropdown').click()
-        cy.get('[data-form="stage-action"] .ff-dropdown-options').should('be.visible')
-        cy.get('[data-form="stage-action"] .ff-dropdown-options > .ff-dropdown-option:contains("active")').click() // Use active snapshot
+        cy.get('[data-form="stage-action"] .ff-listbox').click()
+        cy.get('[data-form="stage-action"] .ff-options').should('be.visible')
+        cy.get('[data-form="stage-action"] .ff-options > .ff-option:contains("active")').click() // Use active snapshot
 
         cy.get('[data-action="add-stage"]').click()
 
@@ -619,13 +625,13 @@ describe('FlowForge - Application - DevOps Pipelines', () => {
 
         cy.get('[data-form="stage-name"] input[type="text"]').type('Stage 1')
 
-        cy.get('[data-form="stage-instance"] .ff-dropdown').click()
-        cy.get('[data-form="stage-instance"] .ff-dropdown-options').should('be.visible')
-        cy.get('[data-form="stage-instance"] .ff-dropdown-options > .ff-dropdown-option:first').click()
+        cy.get('[data-form="stage-instance"] .ff-listbox').click()
+        cy.get('[data-form="stage-instance"] .ff-options').should('be.visible')
+        cy.get('[data-form="stage-instance"] .ff-options > .ff-option:first').click()
 
-        cy.get('[data-form="stage-action"] .ff-dropdown').click()
-        cy.get('[data-form="stage-action"] .ff-dropdown-options').should('be.visible')
-        cy.get('[data-form="stage-action"] .ff-dropdown-options > .ff-dropdown-option:contains("Create new instance snapshot")').click()
+        cy.get('[data-form="stage-action"] .ff-listbox').click()
+        cy.get('[data-form="stage-action"] .ff-options').should('be.visible')
+        cy.get('[data-form="stage-action"] .ff-options > .ff-option:contains("Create new instance snapshot")').click()
 
         cy.get('[data-action="add-stage"]').click()
 
@@ -641,9 +647,9 @@ describe('FlowForge - Application - DevOps Pipelines', () => {
         cy.get('[data-form="stage-action"]').should('not.exist')
 
         // select 1st element for stage-device-group
-        cy.get('[data-form="stage-device-group"] .ff-dropdown').click()
-        cy.get('[data-form="stage-device-group"] .ff-dropdown-options').should('be.visible')
-        cy.get('[data-form="stage-device-group"] .ff-dropdown-options > .ff-dropdown-option:first').click()
+        cy.get('[data-form="stage-device-group"] .ff-listbox').click()
+        cy.get('[data-form="stage-device-group"] .ff-options').should('be.visible')
+        cy.get('[data-form="stage-device-group"] .ff-options > .ff-option:first').click()
 
         cy.get('[data-action="add-stage"]').click()
 
@@ -680,13 +686,13 @@ describe('FlowForge - Application - DevOps Pipelines', () => {
 
         cy.get('[data-form="stage-name"] input[type="text"]').type('Stage 1')
 
-        cy.get('[data-form="stage-instance"] .ff-dropdown').click()
-        cy.get('[data-form="stage-instance"] .ff-dropdown-options').should('be.visible')
-        cy.get('[data-form="stage-instance"] .ff-dropdown-options > .ff-dropdown-option:first').click()
+        cy.get('[data-form="stage-instance"] .ff-listbox').click()
+        cy.get('[data-form="stage-instance"] .ff-options').should('be.visible')
+        cy.get('[data-form="stage-instance"] .ff-options > .ff-option:first').click()
 
-        cy.get('[data-form="stage-action"] .ff-dropdown').click()
-        cy.get('[data-form="stage-action"] .ff-dropdown-options').should('be.visible')
-        cy.get('[data-form="stage-action"] .ff-dropdown-options > .ff-dropdown-option:contains("Create new instance snapshot")').click()
+        cy.get('[data-form="stage-action"] .ff-listbox').click()
+        cy.get('[data-form="stage-action"] .ff-options').should('be.visible')
+        cy.get('[data-form="stage-action"] .ff-options > .ff-option:contains("Create new instance snapshot")').click()
 
         cy.get('[data-action="add-stage"]').click()
 
@@ -705,9 +711,9 @@ describe('FlowForge - Application - DevOps Pipelines', () => {
         cy.get('[data-form="stage-type"]').find('.ff-tile-selection-option[data-form="tile-selection-option-device-group"]').click()
 
         // Select create new
-        cy.get('[data-form="stage-device-group"] .ff-dropdown').click()
-        cy.get('[data-form="stage-device-group"] .ff-dropdown-options').should('be.visible')
-        cy.get('[data-form="stage-device-group"] .ff-dropdown-options > .ff-dropdown-option:contains("Create")').click()
+        cy.get('[data-form="stage-device-group"] .ff-listbox').click()
+        cy.get('[data-form="stage-device-group"] .ff-options').should('be.visible')
+        cy.get('[data-form="stage-device-group"] .ff-options > .ff-option:contains("Create")').click()
 
         // Device groups field hidden to start
         cy.get('[data-form="stage-device-group-name"]').type(GROUP_NAME)
@@ -767,13 +773,13 @@ describe('FlowForge - Application - DevOps Pipelines', () => {
 
         cy.get('[data-form="stage-name"] input[type="text"]').type('Stage 1')
 
-        cy.get('[data-form="stage-instance"] .ff-dropdown').click()
-        cy.get('[data-form="stage-instance"] .ff-dropdown-options').should('be.visible')
-        cy.get('[data-form="stage-instance"] .ff-dropdown-options > .ff-dropdown-option:first').click()
+        cy.get('[data-form="stage-instance"] .ff-listbox').click()
+        cy.get('[data-form="stage-instance"] .ff-options').should('be.visible')
+        cy.get('[data-form="stage-instance"] .ff-options > .ff-option:first').click()
 
-        cy.get('[data-form="stage-action"] .ff-dropdown').click()
-        cy.get('[data-form="stage-action"] .ff-dropdown-options').should('be.visible')
-        cy.get('[data-form="stage-action"] .ff-dropdown-options > .ff-dropdown-option:contains("Create new instance snapshot")').click()
+        cy.get('[data-form="stage-action"] .ff-listbox').click()
+        cy.get('[data-form="stage-action"] .ff-options').should('be.visible')
+        cy.get('[data-form="stage-action"] .ff-options > .ff-option:contains("Create new instance snapshot")').click()
 
         cy.get('[data-action="add-stage"]').click()
 
@@ -784,13 +790,13 @@ describe('FlowForge - Application - DevOps Pipelines', () => {
 
         cy.get('[data-form="stage-name"] input[type="text"]').type('Stage 2')
 
-        cy.get('[data-form="stage-instance"] .ff-dropdown').click()
-        cy.get('[data-form="stage-instance"] .ff-dropdown-options').should('be.visible')
-        cy.get('[data-form="stage-instance"] .ff-dropdown-options > .ff-dropdown-option:first').click()
+        cy.get('[data-form="stage-instance"] .ff-listbox').click()
+        cy.get('[data-form="stage-instance"] .ff-options').should('be.visible')
+        cy.get('[data-form="stage-instance"] .ff-options > .ff-option:first').click()
 
-        cy.get('[data-form="stage-action"] .ff-dropdown').click()
-        cy.get('[data-form="stage-action"] .ff-dropdown-options').should('be.visible')
-        cy.get('[data-form="stage-action"] .ff-dropdown-options > .ff-dropdown-option:last').click()
+        cy.get('[data-form="stage-action"] .ff-listbox').click()
+        cy.get('[data-form="stage-action"] .ff-options').should('be.visible')
+        cy.get('[data-form="stage-action"] .ff-options > .ff-option:last').click()
 
         cy.get('[data-action="add-stage"]').click()
 

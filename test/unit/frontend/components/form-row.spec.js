@@ -50,8 +50,7 @@ describe('FormRow', () => {
 
         expect(wrapper.find('ff-checkbox').exists()).toBe(false)
         expect(wrapper.find('input[type="file"]').exists()).toBe(false)
-        expect(wrapper.find('ff-dropdown').exists()).toBe(true)
-        expect(wrapper.findAll('ff-dropdown-option').length).toBe(2)
+        expect(wrapper.find('ff-listbox').exists()).toBe(true)
         expect(wrapper.find('ff-text-input').exists()).toBe(false)
         expect(wrapper.find('[data-el="form-row-uneditable"]').exists()).toBe(false)
     })

@@ -48,11 +48,13 @@
             <div :class="(wrapperClass ? wrapperClass : 'flex flex-col sm:flex-row relative items-center')">
                 <!-- Dropdown -->
                 <template v-if="options && type !== 'uneditable'">
-                    <ff-dropdown v-model="localModelValue" class="w-full" :disabled="disabled" :placeholder="placeholder" data-el="dropdown">
-                        <ff-dropdown-option v-for="option in options" :value="option.value" :label="option.label" :key="option.label" class="text-sm">
-                            {{ option.label }}
-                        </ff-dropdown-option>
-                    </ff-dropdown>
+                    <ff-listbox
+                        v-model="localModelValue"
+                        :options="options"
+                        :disabled="disabled"
+                        :placeholder="placeholder"
+                        data-el="dropdown"
+                    />
                 </template>
                 <!-- Custom Input -->
                 <template v-else-if="hasCustomInput">

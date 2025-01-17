@@ -298,27 +298,31 @@ describe('FlowForge - Team Devices', () => {
             // Dialog
             cy.get('[data-el="assign-device-to-instance-dialog"]')
                 .should('be.visible')
+
+            cy.get('[data-el="assign-device-to-instance-dialog"]')
                 .within(() => {
                     // Application dropdown
                     cy.get('[data-form="application"]').within(() => {
-                        cy.get('.ff-dropdown[disabled=false]').click()
+                        cy.get('[data-el="dropdown"]').should('not.be.disabled')
+                        cy.get('.ff-listbox').click()
 
                         // Click first Application
-                        cy.get('.ff-dropdown-options > .ff-dropdown-option:first').click()
+                        cy.get('.ff-options > .ff-option:first').click()
                     })
 
                     // Instance dropdown
                     cy.get('[data-form="instance"]').within(() => {
-                        cy.get('.ff-dropdown[disabled=false]').click()
+                        cy.get('.ff-listbox').should('not.be.disabled')
+                        cy.get('.ff-listbox').click()
 
                         // Grab name of first instance
-                        cy.get('.ff-dropdown-options').should('be.visible')
-                        cy.get('.ff-dropdown-options > .ff-dropdown-option:first').invoke('text').then((text) => {
+                        cy.get('.ff-options').should('be.visible')
+                        cy.get('.ff-options > .ff-option:first').invoke('text').then((text) => {
                             selectedInstance = text
                         })
 
                         // Click first instance
-                        cy.get('.ff-dropdown-options > .ff-dropdown-option:first').click()
+                        cy.get('.ff-options > .ff-option:first').click()
                     })
 
                     cy.get('.ff-btn--primary').click()
@@ -340,6 +344,8 @@ describe('FlowForge - Team Devices', () => {
             // Remove dialog
             cy.get('[data-el="platform-dialog"]')
                 .should('be.visible')
+
+            cy.get('[data-el="platform-dialog"]')
                 .within(() => {
                     cy.get('.ff-btn--danger').click()
                 })
@@ -379,17 +385,20 @@ describe('FlowForge - Team Devices', () => {
             // Dialog
             cy.get('[data-el="assign-device-to-application-dialog"]')
                 .should('be.visible')
+
+            cy.get('[data-el="assign-device-to-application-dialog"]')
                 .within(() => {
                     // Instance dropdown
                     cy.get('[data-form="application"]').within(() => {
-                        cy.get('.ff-dropdown[disabled=false]').click()
+                        cy.get('.ff-listbox').should('not.be.disabled')
+                        cy.get('.ff-listbox').click()
 
                         // Grab name of first application
-                        cy.get('.ff-dropdown-options').should('be.visible')
-                        cy.get('.ff-dropdown-options > .ff-dropdown-option:first').invoke('text').then((text) => {
+                        cy.get('.ff-options').should('be.visible')
+                        cy.get('.ff-options > .ff-option:first').invoke('text').then((text) => {
                             selectedApplication = text
                         })
-                        cy.get('.ff-dropdown-options > .ff-dropdown-option:first').click()
+                        cy.get('.ff-options > .ff-option:first').click()
                     })
                     // chose the first application by clicking the primary button within the dialog
                     cy.get('.ff-btn--primary').click()
@@ -411,6 +420,8 @@ describe('FlowForge - Team Devices', () => {
             // Remove dialog
             cy.get('[data-el="platform-dialog"]')
                 .should('be.visible')
+
+            cy.get('[data-el="platform-dialog"]')
                 .within(() => {
                     cy.get('.ff-btn--danger').click()
                 })

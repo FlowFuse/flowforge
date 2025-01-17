@@ -259,9 +259,9 @@ describe('FlowForge - Instances', () => {
         cy.get('[data-action="create-project"]').should('be.disabled')
 
         // select application
-        cy.get('[data-form="application-id"]').click()
-        cy.get('[data-form="application-id"] .ff-dropdown-options').should('be.visible')
-        cy.get('[data-form="application-id"] .ff-dropdown-options > .ff-dropdown-option:first').click()
+        cy.get('[data-form="application-id"] [data-el="dropdown"]').click()
+        cy.get('[data-form="application-id"] [data-el="dropdown"] .ff-options').should('be.visible')
+        cy.get('[data-form="application-id"] [data-el="dropdown"] .ff-options > .ff-option:first').click()
 
         // give instance a name
         cy.get('[data-form="project-name"] input').clear()

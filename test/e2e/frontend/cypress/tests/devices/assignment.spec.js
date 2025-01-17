@@ -94,11 +94,12 @@ describe('FlowForge - Team - Devices - Create', () => {
 
             cy.get('[data-form="application"]').within(() => {
                 // eslint-disable-next-line cypress/require-data-selectors
-                cy.get('.ff-dropdown[disabled=false]').click()
+                cy.get('.ff-listbox').should('not.be.disabled')
+                cy.get('.ff-listbox').click()
 
                 // Click item with label 'application-2'
                 // eslint-disable-next-line cypress/require-data-selectors
-                cy.get('.ff-dropdown-options > .ff-dropdown-option').contains('application-2').click()
+                cy.get('.ff-options > .ff-option').contains('application-2').click()
             })
 
             // click the "Add" button
@@ -210,11 +211,11 @@ describe('FlowForge - Devices - Assign', () => {
         cy.get('[data-el="assignment-dialog"]').should('not.be.visible')
         cy.get('[data-el="assignment-dialog-instance"]').should('be.visible')
 
-        cy.get('[data-el="assignment-dialog-instance"] [data-form="application"] .ff-dropdown').click()
-        cy.get('[data-el="assignment-dialog-instance"] [data-form="application"] .ff-dropdown-options > .ff-dropdown-option').eq(0).click()
+        cy.get('[data-el="assignment-dialog-instance"] [data-form="application"] .ff-listbox').click()
+        cy.get('[data-el="assignment-dialog-instance"] [data-form="application"] .ff-options > .ff-option').eq(0).click()
 
-        cy.get('[data-el="assignment-dialog-instance"] [data-form="instance"] .ff-dropdown').click()
-        cy.get('[data-el="assignment-dialog-instance"] [data-form="instance"] .ff-dropdown-options > .ff-dropdown-option').eq(0).click()
+        cy.get('[data-el="assignment-dialog-instance"] [data-form="instance"] .ff-listbox').click()
+        cy.get('[data-el="assignment-dialog-instance"] [data-form="instance"] .ff-options > .ff-option').eq(0).click()
 
         cy.get('[data-el="assignment-dialog-instance"] [data-action="dialog-confirm"]').click()
 
@@ -260,8 +261,8 @@ describe('FlowForge - Devices - Assign', () => {
         cy.get('[data-el="assignment-dialog"]').should('not.be.visible')
         cy.get('[data-el="assignment-dialog-application"]').should('be.visible')
 
-        cy.get('[data-el="assignment-dialog-application"] [data-form="application"] .ff-dropdown').click()
-        cy.get('[data-el="assignment-dialog-application"] [data-form="application"] .ff-dropdown-options > .ff-dropdown-option').eq(0).click()
+        cy.get('[data-el="assignment-dialog-application"] [data-form="application"] .ff-listbox').click()
+        cy.get('[data-el="assignment-dialog-application"] [data-form="application"] .ff-options > .ff-option').eq(0).click()
 
         cy.get('[data-el="assignment-dialog-application"] [data-action="dialog-confirm"]').click()
 

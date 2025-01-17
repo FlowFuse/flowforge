@@ -19,7 +19,6 @@
                 </div>
                 <hr>
                 <p>Select the Node-RED application you want to {{ bulkOp ? 'move' : 'add' }} the device{{ selection.length > 1 ? 's' : '' }} to.</p>
-
                 <FormRow
                     v-model="input.application"
                     :options="options.applications"

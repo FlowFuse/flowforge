@@ -72,8 +72,8 @@ describe('FlowFuse - Deploy Blueprint', () => {
                 cy.get('[data-el="page-name"]').contains('Deploy Blueprint 1')
 
                 cy.get('[data-form="application-id"]').click()
-                cy.get('[data-form="application-id"] .ff-dropdown-options').should('be.visible')
-                cy.get('[data-form="application-id"] .ff-dropdown-options > .ff-dropdown-option:first').click()
+                cy.get('[data-form="application-id"] .ff-options').should('be.visible')
+                cy.get('[data-form="application-id"] .ff-options > .ff-option:first').click()
 
                 cy.get('[data-action="click-small-blueprint-tile"]').contains('Blueprint 1')
                 cy.get('[data-form="project-type"]').children().first().click()
@@ -103,8 +103,8 @@ describe('FlowFuse - Deploy Blueprint', () => {
                 cy.get('[data-el="page-name"]').contains('Deploy Blueprint 1')
 
                 cy.get('[data-form="application-id"]').click()
-                cy.get('[data-form="application-id"] .ff-dropdown-options').should('be.visible')
-                cy.get('[data-form="application-id"] .ff-dropdown-options > .ff-dropdown-option:first').click()
+                cy.get('[data-form="application-id"] .ff-options').should('be.visible')
+                cy.get('[data-form="application-id"] .ff-options > .ff-option:first').click()
 
                 cy.get('[data-action="click-small-blueprint-tile"]').contains('Blueprint 1')
                 cy.get('[data-form="project-type"]').children().first().click()
@@ -135,8 +135,8 @@ describe('FlowFuse - Deploy Blueprint', () => {
                         cy.get('[data-el="page-name"]').contains(`Deploy ${predefinedBlueprint.name}`)
 
                         cy.get('[data-form="application-id"]').click()
-                        cy.get('[data-form="application-id"] .ff-dropdown-options').should('be.visible')
-                        cy.get('[data-form="application-id"] .ff-dropdown-options > .ff-dropdown-option:first').click()
+                        cy.get('[data-form="application-id"] .ff-options').should('be.visible')
+                        cy.get('[data-form="application-id"] .ff-options > .ff-option:first').click()
 
                         cy.get('[data-action="click-small-blueprint-tile"]').contains(predefinedBlueprint.name)
                         cy.get('[data-form="project-type"]').children().first().click()
@@ -170,8 +170,8 @@ describe('FlowFuse - Deploy Blueprint', () => {
                 cy.get('[data-el="page-name"]').contains('Deploy Blueprint 1')
 
                 cy.get('[data-form="application-id"]').click()
-                cy.get('[data-form="application-id"] .ff-dropdown-options').should('be.visible')
-                cy.get('[data-form="application-id"] .ff-dropdown-options > .ff-dropdown-option:first').click()
+                cy.get('[data-form="application-id"] .ff-options').should('be.visible')
+                cy.get('[data-form="application-id"] .ff-options > .ff-option:first').click()
 
                 cy.get('[data-action="click-small-blueprint-tile"]').contains('Blueprint 1')
                 cy.get('[data-form="project-type"]').children().first().click()
@@ -205,8 +205,8 @@ describe('FlowFuse - Deploy Blueprint', () => {
                 cy.get('[data-el="page-name"]').contains('Deploy Blueprint 1')
 
                 cy.get('[data-form="application-id"]').click()
-                cy.get('[data-form="application-id"] .ff-dropdown-options').should('be.visible')
-                cy.get('[data-form="application-id"] .ff-dropdown-options > .ff-dropdown-option:first').click()
+                cy.get('[data-form="application-id"] .ff-options').should('be.visible')
+                cy.get('[data-form="application-id"] .ff-options > .ff-option:first').click()
 
                 cy.get('[data-action="click-small-blueprint-tile"]').contains('Blueprint 1')
                 cy.get('[data-form="project-type"]').children().first().click()
@@ -240,8 +240,8 @@ describe('FlowFuse - Deploy Blueprint', () => {
                         cy.get('[data-el="page-name"]').contains(`Deploy ${predefinedBlueprint.name}`)
 
                         cy.get('[data-form="application-id"]').click()
-                        cy.get('[data-form="application-id"] .ff-dropdown-options').should('be.visible')
-                        cy.get('[data-form="application-id"] .ff-dropdown-options > .ff-dropdown-option:first').click()
+                        cy.get('[data-form="application-id"] .ff-options').should('be.visible')
+                        cy.get('[data-form="application-id"] .ff-options > .ff-option:first').click()
 
                         cy.get('[data-action="click-small-blueprint-tile"]').contains(predefinedBlueprint.name)
                         cy.get('[data-form="project-type"]').children().first().click()
