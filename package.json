@@ -74,7 +74,7 @@
         "@immobiliarelabs/fastify-sentry": "^8.0.0",
         "@levminer/speakeasy": "^1.4.2",
         "@node-red/util": "^4.0.2",
-        "@node-saml/passport-saml": "^4.0.4",
+        "@node-saml/passport-saml": "^5.0.0",
         "@sentry/node": "^7.73.0",
         "@sentry/profiling-node": "^1.2.1",
         "@sentry/vue": "^7.91.0",
