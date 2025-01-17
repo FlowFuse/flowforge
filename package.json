@@ -76,7 +76,7 @@
         "@node-red/util": "^4.0.2",
         "@node-saml/passport-saml": "^4.0.4",
         "@sentry/node": "^7.73.0",
-        "@sentry/profiling-node": "^1.2.1",
+        "@sentry/profiling-node": "^8.48.0",
         "@sentry/vue": "^7.91.0",
         "@sentry/webpack-plugin": "^2.7.1",
         "axios": "^1.4.0",
