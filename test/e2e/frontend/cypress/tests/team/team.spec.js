@@ -203,4 +203,19 @@ describe('Navigation', () => {
         cy.contains('instance-2-1')
         cy.contains('instance-2-with-devices')
     })
+
+    it('should display the back button when creating a team', () => {
+        cy.login('alice', 'aaPassword')
+
+        cy.visit('/team/create')
+
+        cy.url().should('contain', '/team/create')
+
+        cy.get('[data-nav="back"]').should('exist')
+        cy.get('[data-nav="back"]').contains('Back to Dashboard')
+
+        cy.get('[data-nav="back"]').click()
+
+        cy.url().should('match', /^.*\/team\/.*\/applications/)
+    })
 })

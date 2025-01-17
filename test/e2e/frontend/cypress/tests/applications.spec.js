@@ -141,6 +141,23 @@ describe('FlowForge - Applications', () => {
                 cy.contains(INSTANCE_NAME)
             })
         })
+
+        it('should have a back button', () => {
+            cy.request('GET', 'api/v1/teams').then((response) => {
+                const team = response.body.teams[0]
+
+                cy.visit(`/team/${team.slug}/applications/create`)
+
+                cy.url().should('contain', '/applications/create')
+
+                cy.get('[data-nav="back"]').should('exist')
+                cy.get('[data-nav="back"]').contains('Back to Dashboard')
+
+                cy.get('[data-nav="back"]').click()
+
+                cy.url().should('match', /^.*\/team\/.*\/applications/)
+            })
+        })
     })
 
     it('can be viewed', () => {
@@ -317,6 +334,21 @@ describe('FlowForge - Applications', () => {
                 // check that the delete application button is not disabled
                 cy.get('[data-action="delete-application"]').should('not.be.disabled')
             })
+    })
+
+    it('should display the back button when creating an instance from the application page', () => {
+        cy.visit('/')
+        cy.get('[data-action="view-application"]').first().click()
+
+        cy.get('[data-action="create-instance"]').should('exist')
+        cy.get('[data-action="create-instance"]').should('not.be.disabled')
+        cy.get('[data-action="create-instance"]').click()
+
+        cy.get('[data-nav="back"]').should('exist')
+        cy.get('[data-nav="back"]').contains('Back')
+        cy.get('[data-nav="back"]').click()
+
+        cy.url().should('match', /^.*\/team\/.*\/applications\/.*\/instances/)
     })
 })
 

@@ -236,10 +236,10 @@ export default [
                     title: 'Create Team',
                     menu: {
                         type: 'back',
-                        backTo: (params) => {
+                        backTo: ({ team }) => {
                             return {
                                 label: 'Back to Dashboard',
-                                to: { name: 'Team', params }
+                                to: { name: 'Team', params: { team_slug: team.slug } }
                             }
                         }
                     }
